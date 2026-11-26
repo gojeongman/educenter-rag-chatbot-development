@@ -1,0 +1,10 @@
+# Python 3.10.14 기준. 설치(이 폴더에서 한 번): pip install -r requirements.txt
+# LangChain 버전은 주피터 실습과 같고, 화면용 웹 서버(FastAPI·uvicorn)는 참고 과정과 같은 버전입니다.
+langchain==1.4.10
+langchain-core==1.7.7
+langchain-openai==1.7.4
+langgraph==1.2.24
+langgraph-checkpoint==4.3.2
+openai==3.59.0
+fastapi==0.162.5
+uvicorn==0.54.0
