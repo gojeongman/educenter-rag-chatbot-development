@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>대결 테트리스</title>
+<style>
+  :root{
+    --bg:#0d0e15; --panel:#161824; --edge:#272b3d; --board:#0a0b11;
+    --text:#e8eaf2; --dim:#8b90a6; --accent:#3fd2e0;
+    --red:#e06464; --green:#6fc76f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);
+    font-family:"Apple SD Gothic Neo","Malgun Gothic","Segoe UI",system-ui,sans-serif;
+    display:flex;flex-direction:column;align-items:center;padding:20px 16px 40px}
+  header{text-align:center}
+  h1{margin:0;font-family:Consolas,Menlo,"Courier New",monospace;font-size:22px;
+    font-weight:700;letter-spacing:.4em;text-indent:.4em;color:var(--accent)}
+  header p{margin:4px 0 0;font-size:12px;color:var(--dim)}
+  .layout{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:16px;margin-top:16px}
+  .panel{width:150px;display:flex;flex-direction:column;gap:10px}
+  .box{background:var(--panel);border:1px solid var(--edge);border-radius:8px;padding:10px 12px}
+  .label{font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+  .num{display:block;margin-top:4px;font-family:Consolas,Menlo,"Courier New",monospace;
+    font-size:22px;font-variant-numeric:tabular-nums}
+  .num.small{font-size:16px}
+  canvas{display:block;margin-top:8px}
+  #pBoard,#cBoard{background:var(--board);border:1px solid var(--edge);border-radius:4px}
+  #pHold,#pNext,#cNext{margin-inline:auto}
+  .side{display:flex;flex-direction:column;gap:6px}
+  .cap{display:flex;justify-content:space-between;font-size:12px;color:var(--dim);
+    font-weight:600;letter-spacing:.1em;padding-inline:2px}
+  .cap .d{color:var(--accent)}
+  .meter{display:flex;gap:3px;width:300px;height:10px}
+  .meter i{flex:1;background:var(--red);border-radius:2px}
+  .cpuinfo{display:flex;justify-content:space-between;align-items:flex-start;width:300px}
+  .cpuinfo>div{display:flex;flex-direction:column}
+  .cpuinfo .num{margin-top:2px}
+  .screen{position:fixed;inset:0;z-index:10;background:rgba(9,10,15,.88);
+    display:flex;align-items:center;justify-content:center;padding:16px}
+  .screen[hidden]{display:none}
+  .card{background:var(--panel);border:1px solid var(--edge);border-radius:12px;
+    padding:28px 26px;max-width:540px;width:100%;text-align:center}
+  .card h2{margin:0;font-size:20px;letter-spacing:.08em}
+  .card .how{margin:10px 0 18px;font-size:13px;line-height:1.6;color:var(--dim)}
+  .diffs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .diffs button{font:inherit;text-align:left;cursor:pointer;color:var(--text);
+    background:#1d2030;border:1px solid var(--edge);border-radius:8px;padding:12px 14px}
+  .diffs button b{display:block;font-size:15px;color:var(--accent)}
+  .diffs button span{display:block;margin-top:3px;font-size:12px;color:var(--dim)}
+  .diffs button:hover{border-color:var(--accent)}
+  .diffs button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  #resultTitle{display:block;font-family:Consolas,Menlo,monospace;font-size:26px;letter-spacing:.2em}
+  #resultTitle.win{color:var(--green)}
+  #resultTitle.lose{color:var(--red)}
+  .card .final{margin:10px 0 18px;font-size:14px}
+  .card .final b{font-family:Consolas,Menlo,monospace;font-size:18px;color:var(--accent)}
+  .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .card button{font:inherit;font-size:13px;font-weight:600;cursor:pointer;border-radius:6px;padding:9px 16px}
+  .card .row button{color:var(--bg);background:var(--accent);border:0}
+  .card .row button.ghost{color:var(--text);background:transparent;border:1px solid var(--edge)}
+  .card button:focus-visible{outline:2px solid var(--text);outline-offset:2px}
+  .keys{margin-top:14px;font-size:11px;color:var(--dim)}
+  kbd{font-family:Consolas,Menlo,monospace;font-size:10px;color:var(--text);background:#1d2030;
+    border:1px solid var(--edge);border-bottom-width:2px;border-radius:4px;padding:1px 5px}
+</style>
+</head>
+<body>
+  <header>
+    <h1>TETRIS</h1>
+    <p>컴퓨터와 대결 · 1줄 1,000점 · 4줄 동시 6,000점 · 2줄 이상 클리어 시 상대 공격</p>
+  </header>
+  <div class="layout">
+    <aside class="panel">
+      <div class="box"><span class="label">내 점수</span><span class="num" id="score">0</span></div>
+      <div class="box"><span class="label">라인</span><span class="num" id="lines">0</span></div>
+      <div class="box"><span class="label">홀드</span><canvas id="pHold" width="120" height="70" aria-label="홀드된 블록"></canvas></div>
+      <div class="box"><span class="label">다음</span><canvas id="pNext" width="120" height="210" aria-label="다음 블록 3개"></canvas></div>
+    </aside>
+    <section class="side">
+      <div class="cap"><span>나</span></div>
+      <div class="meter" id="pMeter" title="상대 공격 예고"></div>
+      <div class="stage"><canvas id="pBoard" width="300" height="600" aria-label="내 게임판"></canvas></div>
+    </section>
+    <section class="side">
+      <div class="cap"><span>컴퓨터</span><span class="d" id="diffLabel">-</span></div>
+      <div class="meter" id="cMeter" title="내 공격 예고"></div>
+      <div class="stage"><canvas id="cBoard" width="300" height="600" aria-label="컴퓨터 게임판"></canvas></div>
+      <div class="box cpuinfo">
+        <div><span class="label">라인</span><span class="num small" id="cpuLines">0</span></div>
+        <div><span class="label">다음</span><canvas id="cNext" width="60" height="60" aria-label="컴퓨터 다음 블록"></canvas></div>
+      </div>
+    </section>
+  </div>
+  <p class="keys"><kbd>←</kbd><kbd>→</kbd> 이동 · <kbd>↑</kbd> 회전 · <kbd>↓</kbd> 소프트 드롭 · <kbd>Space</kbd> 하드 드롭 · <kbd>Shift</kbd> 홀드 · <kbd>Esc</kbd> 난이도 선택</p>
+  <div id="screen" class="screen">
+    <div class="card" id="menuView">
+      <h2>대결 테트리스</h2>
+      <p class="how">줄을 없애 컴퓨터 판에 쓰레기 블록을 쌓으세요.<br>
+        컴퓨터도 공격해 옵니다 — 보드가 천장까지 차오르면 패배.<br>
+        공격량: 2줄 +1 · 3줄 +2 · 4줄(테트리스) +4</p>
+      <div class="diffs">
+        <button type="button" data-diff="easy"><b>이지</b><span>느린 상대, 실수가 잦아요</span></button>
+        <button type="button" data-diff="normal"><b>노말</b><span>기본 대결 난이도</span></button>
+        <button type="button" data-diff="hard"><b>하드</b><span>빠르고 공격적인 상대</span></button>
+        <button type="button" data-diff="hell"><b>지옥</b><span>매우 빠르고 공격 2배</span></button>
+      </div>
+    </div>
+    <div class="card" id="resultView" hidden>
+      <strong id="resultTitle">승리!</strong>
+      <p class="final">최종 점수 <b id="resultScore">0</b></p>
+      <div class="row">
+        <button type="button" id="again">다시 대결 (R)</button>
+        <button type="button" id="toMenu" class="ghost">난이도 변경</button>
+      </div>
+    </div>
+  </div>
+  <script>
+(() => {
+  "use strict";
+
+  // ===== 설정값 =====
+  const COLS = 10, ROWS = 20, CELL = 30;
+  const SOFT_DROP_MS = 45;
+  const DAS_DELAY = 170, DAS_REPEAT = 60;
+  const ATTACK = { 1: 0, 2: 1, 3: 2, 4: 4 };  // 줄 수 → 상대에게 가는 쓰레기 줄 수
+  const DIFFS = {
+    easy:   { label: "이지", dropMs: 900, cpuDropMs: 1300, cpuActMs: 130, cpuSkill: .5,  cpuAttack: .5 },
+    normal: { label: "노말", dropMs: 800, cpuDropMs: 1000, cpuActMs: 80,  cpuSkill: .8,  cpuAttack: 1 },
+    hard:   { label: "하드", dropMs: 700, cpuDropMs: 700,  cpuActMs: 45,  cpuSkill: .95, cpuAttack: 1.5 },
+    hell:   { label: "지옥", dropMs: 600, cpuDropMs: 380,  cpuActMs: 18,  cpuSkill: 1,   cpuAttack: 2 },
+  };
+
+  const SHAPES = {
+    I: [[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]],
+    O: [[1,1],[1,1]],
+    T: [[0,1,0],[1,1,1],[0,0,0]],
+    S: [[0,1,1],[1,1,0],[0,0,0]],
+    Z: [[1,1,0],[0,1,1],[0,0,0]],
+    J: [[1,0,0],[1,1,1],[0,0,0]],
+    L: [[0,0,1],[1,1,1],[0,0,0]],
+  };
+  const COLORS = {
+    I: "#3fd2e0", O: "#f2c14e", T: "#b07fe0", S: "#6fc76f",
+    Z: "#e06464", J: "#5f86e0", L: "#e0913f", G: "#4c5165",  // G = 쓰레기 블록
+  };
+
+  function rotateM(m){
+    const n = m.length;
+    const r = Array.from({ length: n }, () => Array(n).fill(0));
+    for(let y = 0; y < n; y++)
+      for(let x = 0; x < n; x++)
+        r[x][n - 1 - y] = m[y][x];
+    return r;
+  }
+
+  // ===== 한쪽 보드 전체를 담당하는 엔진 (플레이어·컴퓨터 공용) =====
+  class Tetris {
+    constructor(kind, opts){
+      this.kind = kind;
+      this.dropMs = opts.dropMs;
+      this.cpuAttack = opts.cpuAttack || 1;
+      this.hooks = opts.hooks || {};
+      this.softDrop = false;
+      this.reset();
+    }
+
+    reset(){
+      this.board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+      this.bag = [];
+      this.queue = [this.nextType(), this.nextType(), this.nextType()];
+      this.hold = null;
+      this.canHold = true;
+      this.score = 0;
+      this.lines = 0;
+      this.dropTimer = 0;
+      this.garbage = 0;      // 아직 반영되지 않은 받은 공격
+      this.alive = true;
+      this.pieceId = 0;
+      this.cur = null;
+      this.spawnFromQueue();
+    }
+
+    refillBag(){
+      const t = Object.keys(SHAPES);
+      for(let i = t.length - 1; i > 0; i--){
+        const j = (Math.random() * (i + 1)) | 0;
+        [t[i], t[j]] = [t[j], t[i]];
+      }
+      this.bag.push(...t);
+    }
+
+    nextType(){
+      if(this.bag.length === 0) this.refillBag();
+      return this.bag.pop();
+    }
+
+    makePiece(type){
+      const m = SHAPES[type].map(r => [...r]);
+      return { type, m, rotCount: 0, x: Math.floor((COLS - m[0].length) / 2), y: 0 };
+    }
+
+    hit(m, px, py){
+      for(let r = 0; r < m.length; r++)
+        for(let c = 0; c < m[r].length; c++){
+          if(!m[r][c]) continue;
+          const x = px + c, y = py + r;
+          if(x < 0 || x >= COLS || y >= ROWS) return true;
+          if(y >= 0 && this.board[y][x]) return true;
+        }
+      return false;
+    }
+
+    spawn(type){
+      this.cur = this.makePiece(type);
+      this.pieceId++;
+      if(this.hit(this.cur.m, this.cur.x, this.cur.y)) this.die();
+    }
+
+    spawnFromQueue(){
+      const t = this.queue.shift();
+      this.queue.push(this.nextType());
+      this.spawn(t);
+    }
+
+    tryMove(dx, dy){
+      if(!this.alive || this.hit(this.cur.m, this.cur.x + dx, this.cur.y + dy)) return false;
+      this.cur.x += dx;
+      this.cur.y += dy;
+      return true;
+    }
+
+    tryRotate(){
+      const n = this.cur.m.length;
+      const rot = Array.from({ length: n }, () => Array(n).fill(0));
+      for(let r = 0; r < n; r++)
+        for(let c = 0; c < n; c++)
+          rot[c][n - 1 - r] = this.cur.m[r][c];
+      for(const k of [0, -1, 1, -2, 2]){
+        if(!this.hit(rot, this.cur.x + k, this.cur.y)){
+          this.cur.m = rot;
+          this.cur.x += k;
+          this.cur.rotCount = (this.cur.rotCount + 1) % 4;
+          return true;
+        }
+      }
+      return false;
+    }
+
+    hardDrop(){
+      if(!this.alive) return;
+      while(this.tryMove(0, 1));
+      this.lock();
+    }
+
+    doHold(){
+      if(!this.alive || !this.canHold) return;
+      const t = this.cur.type, h = this.hold;
+      this.hold = t;
+      this.canHold = false;
+      if(h) this.spawn(h); else this.spawnFromQueue();
+    }
+
+    lock(){
+      for(let r = 0; r < this.cur.m.length; r++)
+        for(let c = 0; c < this.cur.m[r].length; c++){
+          if(!this.cur.m[r][c]) continue;
+          const y = this.cur.y + r;
+          if(y < 0){ this.die(); return; }
+          this.board[y][this.cur.x + c] = this.cur.type;
+        }
+      const n = this.clearLines();
+      if(n){
+        this.score += n === 4 ? 6000 : n * 1000;  // 4줄 동시 클리어는 6,000점
+        this.lines += n;
+      }
+      if(n >= 2 && this.opponent && this.opponent.alive){
+        const mult = this.kind === "cpu" ? this.cpuAttack : 1;
+        const send = Math.floor(ATTACK[n] * mult);
+        if(send > 0) this.opponent.receiveGarbage(send);
+      }
+      this.canHold = true;
+      this.dropTimer = 0;
+      this.applyGarbage();
+      if(!this.alive) return;
+      this.spawnFromQueue();
+      if(this.hooks.onLock) this.hooks.onLock(this);
+    }
+
+    clearLines(){
+      const kept = this.board.filter(row => !row.every(v => v));
+      const n = ROWS - kept.length;
+      while(kept.length < ROWS) kept.unshift(Array(COLS).fill(0));
+      this.board = kept;
+      return n;
+    }
+
+    receiveGarbage(n){
+      this.garbage += n;
+      if(this.hooks.onGarbage) this.hooks.onGarbage(this);
+    }
+
+    applyGarbage(){
+      if(!this.garbage || !this.alive) return;
+      const n = this.garbage;
+      // 기존 블록이 판 위로 밀려 나가면 패배
+      for(let r = 0; r < n; r++)
+        if(this.board[r].some(v => v)){ this.die(); return; }
+      const hole = (Math.random() * COLS) | 0;
+      this.board.splice(0, n);
+      for(let i = 0; i < n; i++){
+        const row = Array(COLS).fill("G");
+        row[hole] = 0;
+        this.board.push(row);
+      }
+      this.garbage = 0;
+      if(this.hooks.onGarbage) this.hooks.onGarbage(this);
+    }
+
+    update(dt){
+      if(!this.alive) return;
+      this.dropTimer += dt;
+      const interval = (this.kind === "player" && this.softDrop) ? SOFT_DROP_MS : this.dropMs;
+      while(this.dropTimer >= interval){
+        this.dropTimer -= interval;
+        if(!this.tryMove(0, 1)){ this.lock(); break; }
+      }
+    }
+
+    die(){
+      if(!this.alive) return;
+      this.alive = false;
+      if(this.hooks.onDie) this.hooks.onDie(this);
+    }
+  }
+
+  // ===== 컴퓨터 AI =====
+  // 모든 회전×위치를 클론 보드에 놓아 보고 지형 점수가 가장 좋은 자리를 고른다
+  function overlaps(bd, m, px, py){
+    for(let r = 0; r < m.length; r++)
+      for(let c = 0; c < m[r].length; c++){
+        if(!m[r][c]) continue;
+        const x = px + c, y = py + r;
+        if(x < 0 || x >= COLS || y >= ROWS) return true;
+        if(y >= 0 && bd[y][x]) return true;
+      }
+    return false;
+  }
+
+  function simulate(bd, type, rot, x){
+    let m = SHAPES[type];
+    for(let i = 0; i < rot; i++) m = rotateM(m);
+    let y = 0;
+    if(overlaps(bd, m, x, y)) return null;
+    while(!overlaps(bd, m, x, y + 1)) y++;
+    const copy = bd.map(r => [...r]);
+    for(let r = 0; r < m.length; r++)
+      for(let c = 0; c < m[r].length; c++)
+        if(m[r][c]) copy[y + r][x + c] = type;
+    let cleared = 0;
+    for(let r = 0; r < ROWS; r++)
+      if(copy[r].every(v => v)) cleared++;
+    const kept = copy.filter(row => !row.every(v => v));
+    while(kept.length < ROWS) kept.unshift(Array(COLS).fill(0));
+    // 높이 합·구멍·굴곡은 작을수록, 지운 줄 수는 클수록 좋다
+    const h = Array(COLS).fill(0);
+    for(let c = 0; c < COLS; c++)
+      for(let r = 0; r < ROWS; r++)
+        if(kept[r][c]){ h[c] = ROWS - r; break; }
+    let agg = 0, holes = 0, bump = 0;
+    for(let c = 0; c < COLS; c++) agg += h[c];
+    for(let c = 0; c < COLS - 1; c++) bump += Math.abs(h[c] - h[c + 1]);
+    for(let c = 0; c < COLS; c++){
+      let seen = false;
+      for(let r = 0; r < ROWS; r++){
+        if(kept[r][c]) seen = true;
+        else if(seen) holes++;
+      }
+    }
+    return -0.510066 * agg - 0.35663 * holes - 0.184483 * bump + 0.760666 * cleared;
+  }
+
+  class Bot {
+    constructor(game, diff){
+      this.game = game;
+      this.cpuActMs = diff.cpuActMs;
+      this.cpuSkill = diff.cpuSkill;
+      this.timer = 0;
+      this.target = null;
+      this.attempts = 0;
+    }
+
+    update(dt){
+      const g = this.game;
+      if(!g.alive || !g.cur) return;
+      this.timer += dt;
+      if(this.timer < this.cpuActMs) return;
+      this.timer = 0;
+      if(!this.target || this.target.pieceId !== g.pieceId){
+        this.plan();
+        this.attempts = 0;
+      }
+      const t = this.target;
+      this.attempts++;
+      if(this.attempts > 24){ g.hardDrop(); return; }  // 자리 잡기 실패 시 안전장치
+      if(t.rot !== g.cur.rotCount) g.tryRotate();
+      else if(g.cur.x < t.x) g.tryMove(1, 0);
+      else if(g.cur.x > t.x) g.tryMove(-1, 0);
+      else g.hardDrop();
+    }
+
+    plan(){
+      const g = this.game;
+      const cands = [];
+      for(let rot = 0; rot < 4; rot++)
+        for(let x = -2; x < COLS; x++){
+          const v = simulate(g.board, g.cur.type, rot, x);
+          if(v !== null) cands.push({ rot, x, value: v });
+        }
+      let pick;
+      if(cands.length === 0){
+        pick = { rot: 0, x: g.cur.x };
+      } else {
+        cands.sort((a, b) => b.value - a.value);
+        pick = cands[0];
+        // 난이도가 낮으면 최선 대신 준수픽을 고른다
+        if(Math.random() > this.cpuSkill && cands.length > 1){
+          const top = Math.min(4, cands.length);
+          pick = cands[1 + ((Math.random() * (top - 1)) | 0)];
+        }
+      }
+      this.target = { pieceId: g.pieceId, rot: pick.rot, x: pick.x };
+    }
+  }
+
+  // ===== 화면·HUD =====
+  const $ = id => document.getElementById(id);
+  const pCtx = $("pBoard").getContext("2d");
+  const cCtx = $("cBoard").getContext("2d");
+  const pNextCtx = $("pNext").getContext("2d");
+  const pHoldCtx = $("pHold").getContext("2d");
+  const cNextCtx = $("cNext").getContext("2d");
+  const scoreEl = $("score"), linesEl = $("lines"), cpuLinesEl = $("cpuLines");
+  const pMeterEl = $("pMeter"), cMeterEl = $("cMeter");
+  const diffLabelEl = $("diffLabel");
+  const screenEl = $("screen"), menuView = $("menuView"), resultView = $("resultView");
+  const resultTitle = $("resultTitle"), resultScore = $("resultScore");
+
+  let player, cpu, bot, state = "menu", lastDiff = "normal";
+  let leftHeld = false, rightHeld = false, downHeld = false;
+  let dasDir = 0, dasStart = 0, lastRepeat = 0, lastTs = 0;
+
+  function drawCell(g, px, py, size, color, alpha){
+    if(alpha !== undefined) g.globalAlpha = alpha;
+    g.fillStyle = color;
+    g.fillRect(px + 1, py + 1, size - 2, size - 2);
+    if(alpha !== undefined) g.globalAlpha = 1;
+  }
+
+  function drawGrid(g){
+    g.strokeStyle = "rgba(255,255,255,.05)";
+    g.lineWidth = 1;
+    g.beginPath();
+    for(let c = 1; c < COLS; c++){ g.moveTo(c * CELL + .5, 0); g.lineTo(c * CELL + .5, ROWS * CELL); }
+    for(let r = 1; r < ROWS; r++){ g.moveTo(0, r * CELL + .5); g.lineTo(COLS * CELL, r * CELL + .5); }
+    g.stroke();
+  }
+
+  function drawBoard(g, game){
+    g.clearRect(0, 0, COLS * CELL, ROWS * CELL);
+    drawGrid(g);
+    if(!game) return;
+    for(let r = 0; r < ROWS; r++)
+      for(let c = 0; c < COLS; c++)
+        if(game.board[r][c]) drawCell(g, c * CELL, r * CELL, CELL, COLORS[game.board[r][c]]);
+    if(game.cur && game.alive){
+      let gy = game.cur.y;
+      while(!game.hit(game.cur.m, game.cur.x, gy + 1)) gy++;
+      if(gy > game.cur.y){
+        g.strokeStyle = COLORS[game.cur.type];
+        g.globalAlpha = .45;
+        for(let r = 0; r < game.cur.m.length; r++)
+          for(let c = 0; c < game.cur.m[r].length; c++)
+            if(game.cur.m[r][c] && gy + r >= 0)
+              g.strokeRect((game.cur.x + c) * CELL + 2.5, (gy + r) * CELL + 2.5, CELL - 5, CELL - 5);
+        g.globalAlpha = 1;
+      }
+      for(let r = 0; r < game.cur.m.length; r++)
+        for(let c = 0; c < game.cur.m[r].length; c++)
+          if(game.cur.m[r][c] && game.cur.y + r >= 0)
+            drawCell(g, (game.cur.x + c) * CELL, (game.cur.y + r) * CELL, CELL, COLORS[game.cur.type]);
+    }
+  }
+
+  function drawMini(g, type, cx, cy, size){
+    const m = SHAPES[type];
+    let minR = 9, maxR = -1, minC = 9, maxC = -1;
+    for(let r = 0; r < m.length; r++)
+      for(let c = 0; c < m[r].length; c++)
+        if(m[r][c]){
+          minR = Math.min(minR, r); maxR = Math.max(maxR, r);
+          minC = Math.min(minC, c); maxC = Math.max(maxC, c);
+        }
+    const ox = cx - (maxC - minC + 1) * size / 2;
+    const oy = cy - (maxR - minR + 1) * size / 2;
+    for(let r = minR; r <= maxR; r++)
+      for(let c = minC; c <= maxC; c++)
+        if(m[r][c]) drawCell(g, ox + (c - minC) * size, oy + (r - minR) * size, size, COLORS[type]);
+  }
+
+  function drawSidePanels(){
+    pHoldCtx.clearRect(0, 0, 120, 70);
+    if(player.hold) drawMini(pHoldCtx, player.hold, 60, 35, 18);
+    pNextCtx.clearRect(0, 0, 120, 210);
+    player.queue.slice(0, 3).forEach((t, i) => drawMini(pNextCtx, t, 60, 35 + i * 70, 18));
+    cNextCtx.clearRect(0, 0, 60, 60);
+    if(cpu.queue[0]) drawMini(cNextCtx, cpu.queue[0], 30, 30, 13);
+  }
+
+  function updateHud(){
+    scoreEl.textContent = player.score.toLocaleString("ko-KR");
+    linesEl.textContent = String(player.lines);
+  }
+
+  function updateMeter(el, n){
+    el.innerHTML = "<i></i>".repeat(Math.min(n, 10));
+  }
+
+  function makeHooks(kind){
+    return {
+      onLock: g => {
+        if(kind === "player") updateHud();
+        else cpuLinesEl.textContent = String(g.lines);
+      },
+      onGarbage: g => updateMeter(kind === "player" ? pMeterEl : cMeterEl, g.garbage),
+      onDie: () => endBattle(kind === "player" ? "cpu" : "player"),
+    };
+  }
+
+  function startBattle(key){
+    lastDiff = key;
+    const d = DIFFS[key];
+    player = new Tetris("player", { dropMs: d.dropMs, hooks: makeHooks("player") });
+    cpu = new Tetris("cpu", { dropMs: d.cpuDropMs, cpuAttack: d.cpuAttack, hooks: makeHooks("cpu") });
+    player.opponent = cpu;
+    cpu.opponent = player;
+    bot = new Bot(cpu, d);
+    state = "playing";
+    screenEl.hidden = true;
+    diffLabelEl.textContent = d.label;
+    updateHud();
+    cpuLinesEl.textContent = "0";
+    updateMeter(pMeterEl, 0);
+    updateMeter(cMeterEl, 0);
+    drawSidePanels();
+  }
+
+  function endBattle(winner){
+    if(state !== "playing") return;
+    state = "over";
+    setTimeout(() => {
+      if(state !== "over") return;
+      const win = winner === "player";
+      resultTitle.textContent = win ? "승리!" : "패배…";
+      resultTitle.className = win ? "win" : "lose";
+      resultScore.textContent = player.score.toLocaleString("ko-KR");
+      menuView.hidden = true;
+      resultView.hidden = false;
+      screenEl.hidden = false;
+    }, 800);
+  }
+
+  function showMenu(){
+    state = "menu";
+    menuView.hidden = false;
+    resultView.hidden = true;
+    screenEl.hidden = false;
+  }
+
+  // ===== 입력 (플레이어 조작) =====
+  const PREVENT = new Set(["ArrowLeft", "ArrowRight", "ArrowDown", "ArrowUp", "Space"]);
+
+  document.addEventListener("keydown", e => {
+    if(e.ctrlKey || e.metaKey || e.altKey) return;
+    if(e.code === "Escape"){
+      if(state !== "menu") showMenu();
+      return;
+    }
+    if(state === "over"){
+      if(e.key === "r" || e.key === "R") startBattle(lastDiff);
+      return;
+    }
+    if(state !== "playing" || !player.alive) return;
+    if(PREVENT.has(e.code)) e.preventDefault();
+    switch(e.code){
+      case "ArrowLeft":
+        if(!e.repeat){
+          leftHeld = true; dasDir = -1;
+          dasStart = lastRepeat = performance.now();
+          player.tryMove(-1, 0);
+        }
+        break;
+      case "ArrowRight":
+        if(!e.repeat){
+          rightHeld = true; dasDir = 1;
+          dasStart = lastRepeat = performance.now();
+          player.tryMove(1, 0);
+        }
+        break;
+      case "ArrowDown":
+        if(!e.repeat){
+          downHeld = true;
+          player.softDrop = true;
+          player.dropTimer = 0;
+          if(!player.tryMove(0, 1)) player.lock();
+        }
+        break;
+      case "ArrowUp":
+        if(!e.repeat) player.tryRotate();
+        break;
+      case "Space":
+        if(!e.repeat) player.hardDrop();
+        break;
+      case "ShiftLeft":
+      case "ShiftRight":
+        if(!e.repeat) player.doHold();
+        break;
+    }
+  });
+
+  document.addEventListener("keyup", e => {
+    switch(e.code){
+      case "ArrowLeft":
+        leftHeld = false;
+        if(dasDir === -1){ dasDir = rightHeld ? 1 : 0; dasStart = lastRepeat = performance.now(); }
+        break;
+      case "ArrowRight":
+        rightHeld = false;
+        if(dasDir === 1){ dasDir = leftHeld ? -1 : 0; dasStart = lastRepeat = performance.now(); }
+        break;
+      case "ArrowDown":
+        downHeld = false;
+        if(player) player.softDrop = false;
+        break;
+    }
+  });
+
+  window.addEventListener("blur", () => {
+    leftHeld = rightHeld = downHeld = false;
+    dasDir = 0;
+    if(player) player.softDrop = false;
+  });
+
+  document.querySelectorAll("#menuView [data-diff]").forEach(b =>
+    b.addEventListener("click", () => startBattle(b.dataset.diff)));
+  $("again").addEventListener("click", () => startBattle(lastDiff));
+  $("toMenu").addEventListener("click", showMenu);
+
+  // ===== 게임 루프 =====
+  function loop(ts){
+    requestAnimationFrame(loop);
+    let dt = ts - lastTs;
+    lastTs = ts;
+    if(dt > 250) dt = 250;  // 탭 전환 후 몰아서 진행되는 것 방지
+    if(state === "playing"){
+      if(dasDir && ts - dasStart >= DAS_DELAY && ts - lastRepeat >= DAS_REPEAT){
+        lastRepeat = ts;
+        player.tryMove(dasDir, 0);
+      }
+      player.update(dt);
+      bot.update(dt);
+      cpu.update(dt);
+      drawSidePanels();
+    }
+    drawBoard(pCtx, player);
+    drawBoard(cCtx, cpu);
+  }
+
+  requestAnimationFrame(loop);
+})();
+  </script>
+</body>
+</html>
