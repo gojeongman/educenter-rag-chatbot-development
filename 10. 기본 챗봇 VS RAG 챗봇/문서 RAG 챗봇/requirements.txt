@@ -1,0 +1,11 @@
+# 10 기본 챗봇과 문서 RAG 챗봇 — Python 3.10.14 기준(런박스 준비용). 설치: pip install -r requirements.txt
+# 2026-11-26 Python 3.10.14 새 가상환경에 설치하고 서버를 실행해 확인한 버전입니다.
+langchain-core==1.7.7
+langchain-openai==1.7.4
+langchain-chroma==1.1.0
+chromadb==1.5.9
+openai==3.60.0
+pypdf==7.1.1
+fastapi==0.162.5
+uvicorn==0.54.0
+python-dotenv==1.2.4

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>반도체 공정 RAG 챗봇</title>
+<!-- 제공 화면(고치지 않음). 같은 서버의 api/info · api/chat/stream 만 상대 경로로 호출합니다. 키·주소는 서버 .env에만 있습니다. -->
+<style>
+  :root{--background:#ffffff;--foreground:#18181b;--muted:#f4f4f5;--muted-foreground:#71717a;--border:#e4e4e7;
+    --primary:#18181b;--primary-foreground:#fafafa;--accent:#eff6ff;--accent-foreground:#1d4ed8;--ring:#2563eb;
+    --success:#15803d;--warning:#b45309;--destructive:#dc2626;--measure:#7c3aed;--measure-bg:#f5f3ff;--radius:8px;
+    --font:"Pretendard","Pretendard Variable","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;color-scheme:light}
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--muted);color:var(--foreground);font-family:var(--font);font-size:14px;line-height:1.6}
+  button,textarea{font:inherit;color:inherit}
+  a{color:var(--accent-foreground)}
+  .shell{display:grid;grid-template-columns:240px minmax(0,1fr) 360px;height:100vh}
+  .shell.panel-closed{grid-template-columns:240px minmax(0,1fr) 0}
+  aside.nav{background:var(--background);border-right:1px solid var(--border);padding:16px 12px;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+  .brand{font-weight:700;font-size:15px;line-height:1.35}
+  .brand small{display:block;font-weight:400;color:var(--muted-foreground);font-size:12px;margin-top:2px}
+  .label{font-size:12px;font-weight:600;color:var(--muted-foreground);margin:0 0 6px}
+  .btn{height:36px;padding:0 12px;border-radius:var(--radius);border:1px solid var(--border);background:var(--background);cursor:pointer}
+  .btn:hover{background:var(--muted)}
+  .btn.primary{background:var(--primary);color:var(--primary-foreground);border-color:var(--primary)}
+  .btn.primary:disabled{opacity:.5;cursor:not-allowed}
+  .btn.block{width:100%;text-align:left}
+  .btn:focus-visible,.ref:focus-visible,.mode:focus-visible,.ex:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+  .modes{display:flex;flex-direction:column;gap:4px}
+  .mode{border:1px solid var(--border);background:var(--background);border-radius:var(--radius);padding:6px 10px;text-align:left;cursor:pointer}
+  .mode[aria-pressed="true"]{border-color:var(--primary);box-shadow:inset 0 0 0 1px var(--primary);font-weight:600}
+  .mode small{display:block;font-weight:400;color:var(--muted-foreground);font-size:12px}
+  .ex{display:block;width:100%;text-align:left;border:0;background:transparent;border-radius:6px;padding:6px 8px;cursor:pointer;font-size:13px}
+  .ex:hover{background:var(--muted)}
+  .chips{display:flex;flex-wrap:wrap;gap:4px}
+  .chip{font-size:11px;border:1px solid var(--border);border-radius:999px;padding:1px 8px}
+  .chip.ok{color:var(--success);border-color:#bbf7d0;background:#f0fdf4}.chip.no{color:var(--warning);border-color:#fde68a;background:#fffbeb}
+  main.chat{display:flex;flex-direction:column;min-width:0;height:100vh}
+  .topbar{display:flex;align-items:center;gap:8px;justify-content:space-between;padding:10px 16px;background:var(--background);border-bottom:1px solid var(--border)}
+  .topbar .now{font-size:13px;color:var(--muted-foreground);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #log{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+  .empty{margin:auto;max-width:460px;text-align:center;color:var(--muted-foreground)}
+  .empty h2{color:var(--foreground);font-size:18px;margin:0 0 6px}
+  .q{align-self:flex-end;max-width:80%;background:var(--primary);color:var(--primary-foreground);padding:8px 12px;border-radius:14px 14px 2px 14px;white-space:pre-wrap;overflow-wrap:anywhere}
+  .a{align-self:flex-start;max-width:min(760px,100%);width:100%;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;overflow-wrap:anywhere}
+  .a.selected{box-shadow:0 0 0 2px var(--ring)}
+  .meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:12px;color:var(--muted-foreground);margin-bottom:6px}
+  .badge{border-radius:6px;padding:0 8px;font-size:12px;font-weight:600;background:var(--muted);color:var(--foreground)}
+  .badge.route{background:var(--accent);color:var(--accent-foreground)}
+  .live{display:flex;align-items:center;gap:8px;color:var(--muted-foreground);font-size:13px}
+  .spinner{width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--ring);border-radius:50%;animation:spin .8s linear infinite;flex:none}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .answer{white-space:pre-wrap;margin:4px 0}
+  .ref{border:1px solid #bfdbfe;background:var(--accent);color:var(--accent-foreground);border-radius:6px;font-size:12px;font-weight:700;padding:0 6px;margin:0 1px;cursor:pointer;vertical-align:1px}
+  .ref.measure{border-color:#ddd6fe;background:var(--measure-bg);color:var(--measure)}
+  .note{font-size:12.5px;border-radius:6px;padding:6px 10px;margin-top:8px}
+  .note.info{background:var(--muted);color:var(--muted-foreground)}.note.warn{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+  .note.err{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+  .linkbtn{border:0;background:none;color:var(--accent-foreground);cursor:pointer;padding:0;font-size:12.5px;text-decoration:underline}
+  form.composer{display:flex;gap:8px;padding:12px 16px;background:var(--background);border-top:1px solid var(--border)}
+  form.composer textarea{flex:1;min-height:40px;max-height:140px;resize:vertical;border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;background:var(--background)}
+  form.composer textarea:focus{outline:2px solid var(--ring);outline-offset:0}
+  aside.panel{background:var(--background);border-left:1px solid var(--border);display:flex;flex-direction:column;min-width:0;overflow:hidden}
+  .shell.panel-closed aside.panel{display:none}
+  .panel-head{padding:12px 14px;border-bottom:1px solid var(--border)}
+  .panel-head .t{font-weight:600;font-size:13px}.panel-head .s{font-size:12px;color:var(--muted-foreground);overflow-wrap:anywhere}
+  .tabs{display:flex;gap:4px;padding:8px 14px 0}
+  .tab{border:0;background:none;padding:6px 10px;border-bottom:2px solid transparent;cursor:pointer;color:var(--muted-foreground)}
+  .tab[aria-selected="true"]{color:var(--foreground);border-bottom-color:var(--primary);font-weight:600}
+  .panel-body{flex:1;overflow-y:auto;padding:12px 14px}
+  .steps{list-style:none;margin:0;padding:0}
+  .steps li{display:grid;grid-template-columns:18px 1fr auto;gap:6px;padding:7px 0;border-bottom:1px dashed var(--border);font-size:13px}
+  .steps .who{font-size:11px;color:var(--muted-foreground)}
+  .steps .d{display:block;font-size:12px;color:var(--muted-foreground);overflow-wrap:anywhere}
+  .st-running{color:var(--ring)}.st-done{color:var(--success)}.st-error{color:var(--destructive)}
+  .card{border:1px solid var(--border);border-radius:var(--radius);padding:10px;margin-bottom:10px;font-size:13px;transition:box-shadow .2s}
+  .card.focus{box-shadow:0 0 0 2px var(--ring)}
+  .card.measure{border-color:#ddd6fe}
+  .card .h{display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+  .card .n{font-weight:700;color:var(--accent-foreground)}.card.measure .n{color:var(--measure)}
+  .card blockquote{margin:6px 0;padding:4px 10px;border-left:3px solid var(--ring);background:#f8fafc}
+  .card pre{white-space:pre-wrap;font-family:inherit;background:var(--muted);padding:6px 8px;border-radius:6px;margin:4px 0 0}
+  .card table{border-collapse:collapse;width:100%;font-size:12px;margin-top:6px}
+  .card td,.card th{border:1px solid var(--border);padding:2px 6px;text-align:right}.card th{background:var(--muted)}
+  .card td:first-child,.card th:first-child{text-align:left}
+  .card td.max{background:var(--measure-bg);font-weight:700}
+  .cmp dl{display:grid;grid-template-columns:auto 1fr;gap:2px 8px;margin:6px 0 12px}.cmp dt{color:var(--muted-foreground)}.cmp dd{margin:0}
+  .navtoggle{display:none}
+  @media (max-width:1100px){
+    .shell,.shell.panel-closed{grid-template-columns:220px minmax(0,1fr)}
+    aside.panel{position:fixed;right:0;top:0;bottom:0;width:min(380px,92vw);z-index:20;box-shadow:-8px 0 24px rgba(0,0,0,.12)}
+  }
+  @media (max-width:720px){
+    .shell,.shell.panel-closed{grid-template-columns:minmax(0,1fr);height:auto}
+    aside.nav{border-right:0;border-bottom:1px solid var(--border);padding:10px 12px;gap:10px}
+    aside.nav .more{display:none}
+    aside.nav.open .more{display:flex;flex-direction:column;gap:10px}
+    .navtoggle{display:inline-flex;align-items:center}
+    main.chat{height:auto;min-height:70vh}
+    .q{max-width:92%}
+  }
+</style>
+</head>
+<body>
+<div class="shell" id="shell">
+  <aside class="nav" id="nav" aria-label="탐색">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+      <div class="brand" id="brand">반도체 공정 RAG 챗봇<small id="doc">불러오는 중…</small></div>
+      <button type="button" class="btn navtoggle" id="navToggle" aria-expanded="false">메뉴</button>
+    </div>
+    <button type="button" class="btn primary block" id="reset">+ 새 대화</button>
+    <div class="more">
+      <div id="modeBox" hidden><p class="label">답변 방식</p><div class="modes" id="modes"></div></div>
+      <div><p class="label">예시 질문</p><div id="examples"></div></div>
+      <div><p class="label">연결 상태</p><div class="chips" id="chips"></div></div>
+      <div id="dataBox" style="font-size:12px;color:var(--muted-foreground)"></div>
+    </div>
+  </aside>
+
+  <main class="chat">
+    <div class="topbar">
+      <span class="now" id="now">질문을 보내면 이 대화에 답과 근거가 쌓입니다.</span>
+      <button type="button" class="btn" id="panelToggle" aria-controls="panel" aria-expanded="true">실행 기록·자료</button>
+    </div>
+    <div id="log" aria-live="polite"></div>
+    <form class="composer" id="form">
+      <textarea id="q" rows="1" placeholder="질문을 입력하세요 (Enter 보내기 · Shift+Enter 줄바꿈)" aria-label="질문 입력"></textarea>
+      <button class="btn primary" id="send" type="submit" style="height:40px">보내기</button>
+    </form>
+  </main>
+
+  <aside class="panel" id="panel" aria-label="실행 기록과 자료">
+    <div class="panel-head"><div class="t" id="pTitle">실행 기록·자료</div><div class="s" id="pSub">질문을 고르면 그 요청의 기록이 보입니다.</div></div>
+    <div class="tabs" role="tablist">
+      <button type="button" class="tab" role="tab" data-tab="steps" aria-selected="true">실행 기록</button>
+      <button type="button" class="tab" role="tab" data-tab="sources" aria-selected="false">자료 <span id="srcCount"></span></button>
+      <button type="button" class="tab" role="tab" data-tab="compare" aria-selected="false" hidden id="cmpTab">모드 비교</button>
+      <button type="button" class="btn" id="panelClose" style="margin-left:auto;height:30px">닫기</button>
+    </div>
+    <div class="panel-body" id="pBody"></div>
+  </aside>
+</div>
+<script>
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const turns = new Map();            // 요청 번호 → {question, mode, steps:Map, result, state}
+let INFO = null, mode = null, busy = false, seq = 0, selected = null, tab = "steps";
+const lastByMode = {};
+
+function modeLabel(id){ const m = (INFO?.modes || []).find(x => x.id === id); return m ? m.label : ""; }
+function setMode(id){ mode = id; document.querySelectorAll(".mode").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.mode === id))); }
+function setPanel(open){ $("#shell").classList.toggle("panel-closed", !open); $("#panelToggle").setAttribute("aria-expanded", String(open)); }
+function narrow(){ return matchMedia("(max-width:1100px)").matches; }
+
+async function loadInfo(){
+  try{
+    INFO = await (await fetch("api/info")).json();
+    document.title = INFO.title;
+    $("#brand").firstChild.textContent = INFO.title;
+    $("#doc").textContent = INFO.document.document;
+    const chip = (ok, t, bad) => `<span class="chip ${ok ? "ok" : "no"}">${esc(t)} ${ok ? "준비됨" : esc(bad || "설정 필요")}</span>`;
+    const s = INFO.settings;
+    $("#chips").innerHTML = chip(s.chat_ready, s.chat_model) + chip(s.embedding_ready, s.embedding_model)
+      + chip(INFO.document.pdf_ready, "가이드북 PDF", "없음(첫 검색 때 받음)");
+    let data = `<a href="${esc(INFO.document.pdf_url)}" target="_blank" rel="noopener">가이드북 원문(PDF 8번째 페이지) ↗</a>`;
+    if (INFO.data) data += `<br>측정 데이터: <a href="${esc(INFO.data.url)}" target="_blank" rel="noopener">${esc(INFO.data.name)} ↗</a><br>${esc(INFO.data.credit)}`;
+    $("#dataBox").innerHTML = data;
+    $("#examples").innerHTML = INFO.examples.map(q => `<button type="button" class="ex">${esc(q)}</button>`).join("");
+    $("#examples").querySelectorAll(".ex").forEach(b => b.addEventListener("click", () => { $("#q").value = b.textContent; $("#q").focus(); }));
+    if ((INFO.modes || []).length){
+      $("#modeBox").hidden = false;
+      $("#modes").innerHTML = INFO.modes.map(m => `<button type="button" class="mode" data-mode="${esc(m.id)}" aria-pressed="false">${esc(m.label)}<small>${esc(m.hint || "")}</small></button>`).join("");
+      $("#modes").querySelectorAll(".mode").forEach(b => b.addEventListener("click", () => setMode(b.dataset.mode)));
+      setMode(INFO.modes[0].id);
+      $("#cmpTab").hidden = INFO.modes.length < 2 || INFO.chapter !== "10";
+    } else { mode = "main"; }
+  }catch(e){ $("#doc").textContent = "서버 정보를 불러오지 못했습니다. 서버가 켜져 있는지 확인하세요."; }
+  showEmpty();
+}
+
+function showEmpty(){
+  $("#log").innerHTML = `<div class="empty"><h2>무엇이 궁금한가요?</h2>왼쪽 예시 질문을 누르거나 직접 입력하세요. 답변의 [1]·[2]를 누르면 오른쪽에 근거가 열립니다.</div>`;
+}
+
+function stepIcon(st){ return {running: "<span class='spinner' style='width:12px;height:12px'></span>", done: "✓", error: "✕"}[st] || "•"; }
+function renderSteps(t){
+  if (!t.steps.size) return `<p class="note info">${t.state === "pending" ? "서버의 첫 기록을 기다리는 중…" : (t.mode === "basic" ? "문서 검색 없음 — 기본 모드는 채팅 모델만 호출했습니다." : "도구 호출 없음 — 이 요청에서는 어떤 도구도 실행되지 않았습니다.")}</p>`;
+  return `<ul class="steps">` + [...t.steps.values()].map(s => `<li class="st-${esc(s.status)}"><span>${stepIcon(s.status)}</span>
+    <span>${esc(s.label)}${s.who ? ` <span class="who">· ${esc(s.who)}</span>` : ""}<span class="d">${esc(s.detail)}</span></span>
+    <span>${s.status === "running" ? "진행 중" : esc(((s.ms || 0) / 1000).toFixed(2)) + "초"}</span></li>`).join("") + `</ul>`;
+}
+function measureCard(s){
+  const rows = (s.table || []).map(r => `<tr><td>${esc(r.loc_id)}</td><td class="${r.loc_id === s.si_max_loc ? "max" : ""}">${esc(r.si_etch)}</td><td class="${r.loc_id === s.oxide_max_loc ? "max" : ""}">${esc(r.oxide_etch)}</td></tr>`).join("");
+  return `<div class="card measure" id="card-${selected}-${s.n}" tabindex="-1"><div class="h"><span class="n">[${s.n}]</span><strong>측정값</strong><span>${esc(s.dataset)}</span></div>
+    <div>실험 ID <b>${esc(s.experiment_key)}</b> · 비교 열 ${esc((s.columns || []).join(", "))} · 측정점 ${esc(s.points)}개</div>
+    <blockquote style="border-left-color:var(--measure)">si_etch 최댓값 ${esc(s.si_max_loc)} (${esc(s.si_max)}) · oxide_etch 최댓값 ${esc(s.oxide_max_loc)} (${esc(s.oxide_max)})</blockquote>
+    <table><tr><th>위치</th><th>si_etch</th><th>oxide_etch</th></tr>${rows}</table>
+    <div style="margin-top:6px"><a href="${esc(s.url)}" target="_blank" rel="noopener">원본 데이터(Zenodo) ↗</a> · 값은 측정 도구가 이번 요청에서 반환한 결과</div></div>`;
+}
+function docCard(s){
+  return `<div class="card" id="card-${selected}-${s.n}" tabindex="-1"><div class="h"><span class="n">[${s.n}]</span><strong>${esc(s.source)}</strong></div>
+    <div>책자 ${esc(s.book_page)}쪽 · PDF ${esc(s.pdf_page)}번째 페이지 · 조각 ${esc(s.chunk_id)}${s.rank ? ` · 검색 ${esc(s.rank)}위` : ""}</div>
+    ${(s.quotes || []).map(q => `<blockquote>${esc(q)}</blockquote>`).join("")}
+    <a href="${esc(s.url)}" target="_blank" rel="noopener">원문 PDF 해당 페이지 열기 ↗</a>
+    <details><summary>검색된 조각 원문</summary><pre>${esc(s.text)}</pre></details></div>`;
+}
+function renderPanel(){
+  const t = turns.get(selected);
+  document.querySelectorAll(".tab").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === tab)));
+  if (tab === "compare"){
+    $("#pTitle").textContent = "모드 비교"; $("#pSub").textContent = "각 방식에서 마지막으로 받은 답";
+    $("#pBody").innerHTML = `<div class="cmp">` + (INFO?.modes || []).map(m => { const r = lastByMode[m.id];
+      return `<h4 style="margin:0">${esc(m.label)}</h4>` + (r ? `<dl><dt>질문</dt><dd>${esc(r.question)}</dd><dt>모델</dt><dd>${esc(r.chat_model)}</dd>
+        <dt>문서 검색</dt><dd>${r.searched ? "실행 (" + esc((r.hits || []).map(h => h.chunk_id).join(", ")) + ")" : "실행 안 함"}</dd>
+        <dt>출처</dt><dd>${(r.sources || []).length ? r.sources.map(s => `[${s.n}] 책자 ${esc(s.book_page)}쪽·PDF ${esc(s.pdf_page)}쪽`).join(", ") : "없음"}</dd>
+        <dt>답변</dt><dd>${esc(r.reply)}</dd></dl>` : `<p class="note info">아직 없음</p>`); }).join("") + `</div>`;
+    return;
+  }
+  if (!t){ $("#pTitle").textContent = "실행 기록·자료"; $("#pSub").textContent = "질문을 보내면 그 요청의 기록이 보입니다."; $("#pBody").innerHTML = ""; $("#srcCount").textContent = ""; return; }
+  $("#pTitle").textContent = `요청 #${selected}${t.mode && modeLabel(t.mode) ? " · " + modeLabel(t.mode) : ""}`;
+  $("#pSub").textContent = t.question;
+  const srcs = t.result?.sources || [];
+  $("#srcCount").textContent = srcs.length ? `(${srcs.length})` : "";
+  if (tab === "steps") $("#pBody").innerHTML = renderSteps(t);
+  else $("#pBody").innerHTML = srcs.length ? srcs.map(s => s.kind === "measure" ? measureCard(s) : docCard(s)).join("")
+    : `<p class="note info">${t.state === "pending" ? "답변이 끝나면 근거가 여기에 열립니다." : "이 답변에는 확인된 근거가 없습니다."}</p>`;
+}
+function select(id, newTab){ selected = id; if (newTab) tab = newTab; document.querySelectorAll(".a").forEach(a => a.classList.toggle("selected", a.dataset.id === String(id))); renderPanel(); }
+
+function linkify(text, sources){
+  const ns = new Map((sources || []).map(s => [String(s.n), s]));
+  return esc(text).replace(/\[(\d+)\]/g, (m, n) => ns.has(n) ? `<button type="button" class="ref ${ns.get(n).kind === "measure" ? "measure" : ""}" data-n="${n}" aria-label="근거 ${n} 열기">[${n}]</button>` : m);
+}
+function renderTurn(id){
+  const t = turns.get(id), box = $(`.a[data-id="${id}"]`), body = $(".body", box);
+  if (t.state === "pending"){
+    const last = [...t.steps.values()].pop();
+    body.innerHTML = `<div class="live"><span class="spinner"></span>${last ? esc(last.label) + (last.status === "running" ? " 진행 중…" : " 완료 · 다음 단계 대기 중…") : "생각 중…"}</div>`;
+    return;
+  }
+  const r = t.result;
+  $(".route", box).textContent = r.ok ? (r.route || (r.mode === "basic" ? "기본 모드" : r.mode === "rag" ? "문서 RAG" : "")) : "실패";
+  if (!r.ok){
+    body.innerHTML = `<div class="note err">요청 실패: ${esc(r.error)}</div><button type="button" class="btn retry" style="margin-top:8px">다시 시도</button>`;
+    $(".retry", body).addEventListener("click", () => { if (!busy) send(t.question, t.mode); });
+    return;
+  }
+  let html = `<div class="answer">${linkify(r.reply, r.sources)}</div>`;
+  if (r.mode === "basic") html += `<div class="note info">기본 모드: 문서를 검색하지 않았습니다. 이 답변에는 문서 출처가 없습니다.</div>`;
+  else if (!(r.sources || []).length && (r.searched || t.steps.size)) html += `<div class="note warn">도구는 실행됐지만 답변을 뒷받침하는 근거를 확인하지 못했습니다.</div>`;
+  if ((r.missing || []).length) html += `<div class="note warn">문서로 확인할 수 없는 부분: ${r.missing.map(esc).join(" · ")}</div>`;
+  if ((r.unsupported || []).length) html += `<div class="note warn">근거 확인에 실패해 출처를 붙이지 않은 문장: ${r.unsupported.map(esc).join(" / ")}</div>`;
+  html += `<div style="margin-top:8px"><button type="button" class="linkbtn open">실행 기록 ${t.steps.size}단계 · 근거 ${(r.sources || []).length}개 보기</button></div>`;
+  body.innerHTML = html;
+  body.querySelectorAll(".ref").forEach(b => b.addEventListener("click", () => {
+    select(id, "sources"); setPanel(true);
+    const card = $(`#card-${id}-${b.dataset.n}`);
+    if (card){ card.classList.add("focus"); card.scrollIntoView({behavior: "smooth", block: "center"}); card.focus({preventScroll: true}); }
+  }));
+  $(".open", body).addEventListener("click", () => { select(id, "steps"); setPanel(true); });
+}
+
+async function send(question, m){
+  if (busy) return;
+  question = (question || "").trim();
+  if (!question) return;
+  busy = true; $("#send").disabled = true;
+  const empty = $("#log .empty"); if (empty) empty.remove();
+  const id = ++seq;
+  turns.set(id, {question, mode: m, steps: new Map(), result: null, state: "pending"});
+  $("#log").insertAdjacentHTML("beforeend", `<div class="q">${esc(question)}</div>
+    <div class="a" data-id="${id}"><div class="meta"><span class="badge">요청 #${id}</span>${modeLabel(m) ? `<span class="badge">${esc(modeLabel(m))}</span>` : ""}<span class="badge route route">진행 중</span></div><div class="body"></div></div>`);
+  $(`.a[data-id="${id}"]`).addEventListener("click", e => { if (!e.target.closest("button,a")) select(id); });
+  renderTurn(id); select(id, "steps");
+  if (!narrow()) setPanel(true);
+  $(`.a[data-id="${id}"]`).scrollIntoView({block: "end"});
+  const t = turns.get(id);
+  try{
+    const res = await fetch("api/chat/stream", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({message: question, mode: m})});
+    if (!res.ok || !res.body) throw new Error(`서버 응답 ${res.status}`);
+    const reader = res.body.getReader(), dec = new TextDecoder(); let buf = "";
+    while (true){
+      const {value, done} = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, {stream: true});
+      let i;
+      while ((i = buf.indexOf("\n")) >= 0){
+        const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1);
+        if (!line) continue;
+        const ev = JSON.parse(line);
+        if (ev.type === "step"){ t.steps.set(ev.id, ev); renderTurn(id); if (selected === id && tab === "steps") renderPanel(); }
+        else if (ev.type === "result") t.result = ev;
+      }
+    }
+    if (!t.result) throw new Error("응답이 끝나기 전에 연결이 끊겼습니다.");
+  }catch(e){ t.result = {ok: false, error: e.message || String(e)}; }
+  finally{
+    for (const s of t.steps.values()) if (s.status === "running"){ s.status = "error"; s.detail = "종료 신호 없이 요청이 끝났습니다."; }
+    t.state = "done";
+    if (t.result.ok) lastByMode[m] = t.result;
+    renderTurn(id); if (selected === id) renderPanel();
+    busy = false; $("#send").disabled = false;
+  }
+}
+
+$("#form").addEventListener("submit", e => { e.preventDefault(); const q = $("#q").value; if (!q.trim() || busy) return; $("#q").value = ""; send(q, mode); });
+$("#q").addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing){ e.preventDefault(); $("#form").requestSubmit(); } });
+$("#reset").addEventListener("click", () => { if (busy) return; turns.clear(); selected = null; showEmpty(); renderPanel(); });
+document.querySelectorAll(".tab").forEach(b => b.addEventListener("click", () => { tab = b.dataset.tab; renderPanel(); }));
+$("#panelToggle").addEventListener("click", () => setPanel($("#shell").classList.contains("panel-closed")));
+$("#panelClose").addEventListener("click", () => setPanel(false));
+$("#navToggle").addEventListener("click", () => { const o = $("#nav").classList.toggle("open"); $("#navToggle").setAttribute("aria-expanded", String(o)); });
+if (narrow()) setPanel(false);
+loadInfo();
+</script>
+</body>
+</html>

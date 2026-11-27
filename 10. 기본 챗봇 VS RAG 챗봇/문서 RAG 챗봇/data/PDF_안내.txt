@@ -1,0 +1,5 @@
+이 폴더에 원본 PDF를 동봉하지 않습니다.
+문서: 삼일PwC 『반도체 산업 Business Guidebook』(2025.12) 책자 6쪽 = PDF 8번째 페이지
+발행처 원문: https://www.pwc.com/kr/ko/insights/industry-focus/samilpwc_semicon-guidebook.pdf#page=8
+서버가 처음 문서 RAG를 실행할 때 samilpwc_semicon-guidebook.pdf가 이 폴더에 없으면 발행처 주소에서 한 번 내려받습니다.
+수업 런박스에 미리 준비된 경우에는 그 파일을 그대로 씁니다.

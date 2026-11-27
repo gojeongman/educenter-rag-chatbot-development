@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<!-- saved from url=(0165)https://cdn-api.elice.io/api-attachment/attachment/93846afbd1b6474491dbec6f20643942/08_%EB%AC%B8%EC%84%9C%EC%9D%B8%EB%8D%B1%EC%8B%B1_%EC%8B%9C%EA%B0%81%ED%99%94.html -->
+<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>08 문서 인덱싱 시각화 — PDF 원문이 Chroma에 저장되기까지</title><style>:root{--bg:#f4f4f5;--card:#fff;--fg:#18181b;--muted:#71717a;--border:#e4e4e7;--primary:#18181b;--on-primary:#fafafa;
+  --accent:#2563eb;--accent-bg:#eff6ff;--ok:#15803d;--ok-bg:#f0fdf4;--warn:#b45309;--warn-bg:#fffbeb;--violet:#7c3aed;--violet-bg:#f5f3ff;
+  --c1:#dbeafe;--c2:#fde68a;--c3:#bbf7d0;--c4:#fbcfe8;--c5:#ddd6fe;--both:#fca5a5;--r:8px;
+  --font:"Pretendard","Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.6 var(--font)}
+button{font:inherit;color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:16px 14px 40px}
+header.top{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between}
+h1{font-size:19px;margin:0;line-height:1.35}
+.sub{color:var(--muted);font-size:12.5px;margin:2px 0 0}
+.badge{display:inline-block;border-radius:999px;padding:1px 10px;font-size:12px;font-weight:600;background:var(--violet-bg);color:var(--violet);border:1px solid #ddd6fe}
+.ctrl{position:sticky;top:0;z-index:5;margin-top:10px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.prog{flex:1 1 260px;min-width:220px}
+.prog .t{font-weight:600;font-size:13.5px}.prog .t b{color:var(--accent)}
+.bar{height:6px;background:var(--border);border-radius:999px;overflow:hidden;margin-top:4px}.bar>i{display:block;height:100%;background:var(--accent);width:0;transition:width .4s}
+.btn{height:36px;padding:0 14px;border-radius:var(--r);border:1px solid var(--border);background:var(--card);cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--bg)}.btn.primary{background:var(--primary);color:var(--on-primary);border-color:var(--primary)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn:focus-visible,.pick:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.steps-nav{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+.steps-nav span{font-size:12px;border:1px solid var(--border);border-radius:999px;padding:1px 10px;color:var(--muted);background:var(--card)}
+.steps-nav span.done{color:var(--ok);border-color:#bbf7d0;background:var(--ok-bg)}.steps-nav span.now{color:var(--accent);border-color:#bfdbfe;background:var(--accent-bg);font-weight:600}
+section.scene{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-top:12px;animation:rise .35s ease-out}
+section.scene.current{box-shadow:0 0 0 2px var(--accent)}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+section.scene h2{font-size:16px;margin:0 0 2px}.scene .lead{color:var(--muted);margin:0 0 10px;font-size:13px}
+.grid2{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px}
+@media (max-width:820px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.body{background:#fafafa;border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;line-height:1.9;font-size:13.5px;word-break:keep-all;overflow-wrap:anywhere}
+.mark-etch{text-decoration:underline 2px var(--accent);text-underline-offset:3px}
+.pick{display:block;width:100%;text-align:left;border:1px solid var(--border);border-radius:var(--r);background:var(--card);padding:6px 10px;margin-bottom:6px;cursor:pointer;font-size:13px}
+.pick.sel{box-shadow:inset 0 0 0 2px var(--accent)}
+.pick .id{font-weight:700;font-family:Consolas,"D2Coding",monospace;font-size:12.5px}
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;font-size:13px;margin:0}.kv dt{color:var(--muted)}.kv dd{margin:0;overflow-wrap:anywhere}
+.mono{font-family:Consolas,"D2Coding",monospace;font-size:12.5px}
+.note{font-size:12.5px;border-radius:6px;padding:6px 10px;margin-top:8px;background:var(--bg);color:var(--muted)}
+.note.warn{background:var(--warn-bg);color:#92400e;border:1px solid #fde68a}.note.ok{background:var(--ok-bg);color:var(--ok);border:1px solid #bbf7d0}
+table.t{border-collapse:collapse;width:100%;font-size:13px}
+table.t th,table.t td{border-bottom:1px solid var(--border);padding:5px 6px;text-align:left;vertical-align:top}
+table.t th{color:var(--muted);font-weight:600;font-size:12px}
+table.t tr.sel td{background:var(--accent-bg)}
+table.t tr.click{cursor:pointer}
+.tag{display:inline-block;border-radius:6px;padding:0 6px;font-size:11.5px;font-weight:600}
+.tag.same{background:var(--bg);color:var(--muted)}.tag.new{background:var(--warn-bg);color:var(--warn)}.tag.move{background:var(--violet-bg);color:var(--violet)}
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px}
+.flow .box{flex:1 1 160px;border:1px solid var(--border);border-radius:var(--r);padding:8px 10px;background:#fafafa;min-width:0}
+.flow .arr{align-self:center;color:var(--accent);font-weight:700}
+.box .h{font-size:12px;color:var(--muted);font-weight:600}
+.pages{display:flex;gap:10px;flex-wrap:wrap}
+.pages .pg{border:1px solid var(--border);border-radius:var(--r);padding:8px 12px;background:#fafafa}
+.pages .pg b{font-size:20px;color:var(--accent)}
+.foot{color:var(--muted);font-size:12px;margin-top:14px}
+</style></head>
+<body><div class="wrap">
+<header class="top"><div><h1>08 문서 인덱싱 시각화 — PDF 원문이 Chroma에 저장되기까지</h1><p class="sub">원문 → 겹침 0/60 청킹 → 임베딩 → Chroma 색인, 5단계</p></div>
+<div><span class="badge">미리 계산한 실습 결과</span><p class="sub" style="text-align:right">text-embedding-3-small로 실제 계산한 값을 담아 둠 · 인터넷 없이 재생</p></div></header>
+<div class="ctrl"><div class="prog"><div class="t" id="progT">시작 전 <b>0 / 5</b> · [단계별 진행] 또는 [연속 진행]을 누르세요</div><div class="bar"><i id="progBar" style="width: 0%;"></i></div></div>
+<button type="button" class="btn" id="bStep">단계별 진행</button><button type="button" class="btn primary" id="bPlay">연속 진행</button>
+<button type="button" class="btn" id="bReset">처음부터 다시 보기</button></div>
+<div class="steps-nav" id="nav"><span data-i="0" class="">1. 문서와 원문</span><span data-i="1" class="">2. 겹침 0으로 청킹</span><span data-i="2" class="">3. 겹침 60으로 비교</span><span data-i="3" class="">4. 청크를 임베딩으로</span><span data-i="4" class="">5. Chroma 인덱싱 완료</span></div>
+<section class="scene" style="animation:none"><h2>오늘의 질문: PDF의 한 문장이 어떻게 검색할 수 있는 데이터가 될까?</h2>
+<p class="lead" style="margin:0">문서: 삼일PwC 『반도체 산업 Business Guidebook』(2025.12) · 책자 6쪽(PDF 뷰어 8번째 페이지) ‘2. 반도체 Value Chain Overview (8대 공정)’ · 입력할 것은 없습니다. 아래 버튼으로 진행하세요.</p></section>
+<div id="stage"></div>
+<p class="foot">출처: 삼일PwC 『반도체 산업 Business Guidebook』(2025.12) 책자 6쪽 발췌(시연에 필요한 본문만 수록). 계산: text-embedding-3-small · 제작용 런박스에서 실제 호출. 조각·벡터·순위·좌표·저장 건수는 실제 실행 결과입니다.</p>
+</div><script>const DATA = {"computed": "text-embedding-3-small · 제작용 런박스에서 실제 호출", "source": "삼일PwC 『반도체 산업 Business Guidebook』(2025.12)", "title": "2. 반도체 Value Chain Overview (8대 공정)", "book_page": 6, "pdf_page": 8, "url": "https://www.pwc.com/kr/ko/insights/industry-focus/samilpwc_semicon-guidebook.pdf#page=8", "body": "웨이퍼 제조의 경우, 실리콘 잉곳(Ingot)의 제조와 이를 절단, 연마, 세척하여, 최종 검사를 통해 웨이퍼를 생산하는 공정을 의미한다. 잉곳은 웨이퍼로 제조되기 전의 실리콘 기둥으로, 이를 절단하여 반도체의 기초 제조인 웨이퍼를 생산한다. 이러한 웨이퍼 제조 공정을 통해 생산된 웨이퍼는 산화-포토-식각 공정을 거쳐 회로가 주입된다. 산화공정은 웨이퍼 표면에 산화막을 형성하는 과정으로, 산화막은 이후 과정인 식각 및 이온 주입 과정에서 방지막 역할을 수행하여, 웨이퍼가 설계된 회로대로 제조될 수 있도록 한다. 포토공정은 웨이퍼에 회로를 그려넣는 과정으로, 감광액 도포 후 노광, 현상하는 방식으로 진행된다. 식각 공정에서는 포토공정에서 입혀진 감광액을 제외한 부분을 깎아내게 되며, 이후 증착 및 이온주입공정을 통해 전기적 특성을 부여하게 된다 (8대 공정에 포함되어 있지는 않지만, 산화-포토-식각 과정에서 발생하는 불순물을 제거하기 위한 세정 공정을 거친다.) 금속배선 공정을 통해 배선까지 완료된 반도체에 테스트 및 패키징 공정이 진행되며 이러한 공정은 통상 후공정으로 지칭된다. 테스트 공정에서는 웨이퍼 내의 개별 Die 품질을 테스트하게 되며, 이중 양품을 절단하여 칩으로 제조한다. 절단된 칩은 패키징 과정을 거치게 되며, 패키징 테스트 이후 최종 제품으로 판매된다.", "chunk_size": 200, "etch_sentence": "식각 공정에서는 포토공정에서 입혀진 감광액을 제외한 부분을 깎아내게 되며, 이후 증착 및 이온주입공정을 통해 전기적 특성을 부여하게 된다", "photo_sentence": "포토공정은 웨이퍼에 회로를 그려넣는 과정으로, 감광액 도포 후 노광, 현상하는 방식으로 진행된다.", "etch_at": 344, "photo_at": 289, "chunks": {"0": [{"id": "pwc-p8-c01", "start": 0, "end": 200, "text": "웨이퍼 제조의 경우, 실리콘 잉곳(Ingot)의 제조와 이를 절단, 연마, 세척하여, 최종 검사를 통해 웨이퍼를 생산하는 공정을 의미한다. 잉곳은 웨이퍼로 제조되기 전의 실리콘 기둥으로, 이를 절단하여 반도체의 기초 제조인 웨이퍼를 생산한다. 이러한 웨이퍼 제조 공정을 통해 생산된 웨이퍼는 산화-포토-식각 공정을 거쳐 회로가 주입된다. 산화공정은 웨이퍼 표", "has_etch": false, "has_photo": false}, {"id": "pwc-p8-c02", "start": 200, "end": 400, "text": "면에 산화막을 형성하는 과정으로, 산화막은 이후 과정인 식각 및 이온 주입 과정에서 방지막 역할을 수행하여, 웨이퍼가 설계된 회로대로 제조될 수 있도록 한다. 포토공정은 웨이퍼에 회로를 그려넣는 과정으로, 감광액 도포 후 노광, 현상하는 방식으로 진행된다. 식각 공정에서는 포토공정에서 입혀진 감광액을 제외한 부분을 깎아내게 되며, 이후 증착 및 이온주입공정", "has_etch": false, "has_photo": true}, {"id": "pwc-p8-c03", "start": 400, "end": 600, "text": "을 통해 전기적 특성을 부여하게 된다 (8대 공정에 포함되어 있지는 않지만, 산화-포토-식각 과정에서 발생하는 불순물을 제거하기 위한 세정 공정을 거친다.) 금속배선 공정을 통해 배선까지 완료된 반도체에 테스트 및 패키징 공정이 진행되며 이러한 공정은 통상 후공정으로 지칭된다. 테스트 공정에서는 웨이퍼 내의 개별 Die 품질을 테스트하게 되며, 이중 양품을", "has_etch": false, "has_photo": false}, {"id": "pwc-p8-c04", "start": 600, "end": 663, "text": " 절단하여 칩으로 제조한다. 절단된 칩은 패키징 과정을 거치게 되며, 패키징 테스트 이후 최종 제품으로 판매된다.", "has_etch": false, "has_photo": false}], "60": [{"id": "pwc-p8-c01", "start": 0, "end": 200, "text": "웨이퍼 제조의 경우, 실리콘 잉곳(Ingot)의 제조와 이를 절단, 연마, 세척하여, 최종 검사를 통해 웨이퍼를 생산하는 공정을 의미한다. 잉곳은 웨이퍼로 제조되기 전의 실리콘 기둥으로, 이를 절단하여 반도체의 기초 제조인 웨이퍼를 생산한다. 이러한 웨이퍼 제조 공정을 통해 생산된 웨이퍼는 산화-포토-식각 공정을 거쳐 회로가 주입된다. 산화공정은 웨이퍼 표", "has_etch": false, "has_photo": false}, {"id": "pwc-p8-c02", "start": 140, "end": 340, "text": "웨이퍼 제조 공정을 통해 생산된 웨이퍼는 산화-포토-식각 공정을 거쳐 회로가 주입된다. 산화공정은 웨이퍼 표면에 산화막을 형성하는 과정으로, 산화막은 이후 과정인 식각 및 이온 주입 과정에서 방지막 역할을 수행하여, 웨이퍼가 설계된 회로대로 제조될 수 있도록 한다. 포토공정은 웨이퍼에 회로를 그려넣는 과정으로, 감광액 도포 후 노광, 현상하는 방식으로 진행", "has_etch": false, "has_photo": false}, {"id": "pwc-p8-c03", "start": 280, "end": 480, "text": " 있도록 한다. 포토공정은 웨이퍼에 회로를 그려넣는 과정으로, 감광액 도포 후 노광, 현상하는 방식으로 진행된다. 식각 공정에서는 포토공정에서 입혀진 감광액을 제외한 부분을 깎아내게 되며, 이후 증착 및 이온주입공정을 통해 전기적 특성을 부여하게 된다 (8대 공정에 포함되어 있지는 않지만, 산화-포토-식각 과정에서 발생하는 불순물을 제거하기 위한 세정 공정", "has_etch": true, "has_photo": true}, {"id": "pwc-p8-c04", "start": 420, "end": 620, "text": " (8대 공정에 포함되어 있지는 않지만, 산화-포토-식각 과정에서 발생하는 불순물을 제거하기 위한 세정 공정을 거친다.) 금속배선 공정을 통해 배선까지 완료된 반도체에 테스트 및 패키징 공정이 진행되며 이러한 공정은 통상 후공정으로 지칭된다. 테스트 공정에서는 웨이퍼 내의 개별 Die 품질을 테스트하게 되며, 이중 양품을 절단하여 칩으로 제조한다. 절단된 ", "has_etch": false, "has_photo": false}, {"id": "pwc-p8-c05", "start": 560, "end": 663, "text": "공정에서는 웨이퍼 내의 개별 Die 품질을 테스트하게 되며, 이중 양품을 절단하여 칩으로 제조한다. 절단된 칩은 패키징 과정을 거치게 되며, 패키징 테스트 이후 최종 제품으로 판매된다.", "has_etch": false, "has_photo": false}]}, "dim": 1536, "heads": {"pwc-p8-c01": [-0.008644, 0.010674, 0.008522, 0.026535, 0.045898, -0.028152, 0.056702, 0.018875], "pwc-p8-c02": [-0.020721, -0.006248, 0.006104, 0.032349, -0.02356, -0.026947, 0.014122, 0.036133], "pwc-p8-c03": [-0.032501, 0.002571, 0.015808, 0.044495, -0.013985, -0.002134, 0.002407, 0.004871], "pwc-p8-c04": [-0.002842, -0.006283, 0.002176, 0.011597, 0.005318, -0.016312, 0.004196, 0.024796], "pwc-p8-c05": [0.018707, 0.008049, 0.035339, -0.025803, 0.020248, -0.052734, 0.007366, 0.023972]}, "stored_head_c03": [-0.032349, 0.002569, 0.015808, 0.044434, -0.013947, -0.002226, 0.002468, 0.00494], "stored_count": 5, "readd_new": 0, "questions": ["식각 공정이란?", "웨이퍼에서 필요한 무늬만 남기고 깎는 단계는?"], "results": {"0": {"vector": [{"id": "pwc-p8-c04", "rank": 1, "distance": 0.6678}, {"id": "pwc-p8-c03", "rank": 2, "distance": 0.6683}, {"id": "pwc-p8-c01", "rank": 3, "distance": 0.8028}], "mmr": [{"id": "pwc-p8-c04", "rank": 1}, {"id": "pwc-p8-c03", "rank": 2}, {"id": "pwc-p8-c01", "rank": 3}], "bm25": [{"id": "pwc-p8-c04", "rank": 1, "score": 1.776}, {"id": "pwc-p8-c03", "rank": 2, "score": 1.081}, {"id": "pwc-p8-c02", "rank": 3, "score": 1.068}]}, "1": {"vector": [{"id": "pwc-p8-c02", "rank": 1, "distance": 0.6332}, {"id": "pwc-p8-c01", "rank": 2, "distance": 0.651}, {"id": "pwc-p8-c05", "rank": 3, "distance": 0.6919}], "mmr": [{"id": "pwc-p8-c02", "rank": 1}, {"id": "pwc-p8-c01", "rank": 2}, {"id": "pwc-p8-c05", "rank": 3}], "bm25": [{"id": "pwc-p8-c03", "rank": 1, "score": 1.466}, {"id": "pwc-p8-c02", "rank": 2, "score": 1.44}, {"id": "pwc-p8-c05", "rank": 3, "score": 0.575}]}}, "pca": {"ratio": [0.4066, 0.3183, 0.1526], "chunks": {"pwc-p8-c01": [-0.27295, 0.54302, -0.25417], "pwc-p8-c02": [-0.3546, 0.07111, 0.36106], "pwc-p8-c03": [-0.342, -0.53044, -0.07636], "pwc-p8-c04": [0.38022, -0.19771, -0.24163], "pwc-p8-c05": [0.58933, 0.11402, 0.21111]}, "questions": [[0.0064, -0.1542, -0.19095], [-0.04566, 0.09275, 0.05562]]}, "settings": {"bm25": "공백 제거 후 글자 2-gram, k1=1.5, b=0.75", "mmr": "후보 fetch_k=5(조각 5개 전부), lambda_mult=0.5", "vector": "Chroma 코사인 거리, k=3", "filter": "없음(문서 범위 = 책자 6쪽 한 쪽)"}};</script><script>// 단계 재생기: STEPS = [{name, run(sceneEl) → Promise|void}] / 한 번에 한 단계, 연속 진행·일시정지·처음부터
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const Player = {
+  idx: 0, busy: false, playing: false, timer: null, token: 0, DWELL: 5200,
+  init(steps, onReset){
+    this.steps = steps; this.onReset = onReset;
+    $("#nav").innerHTML = steps.map((s, i) => `<span data-i="${i}">${i + 1}. ${esc(s.name)}</span>`).join("");
+    $("#bStep").addEventListener("click", () => { this.stopAuto(); this.next(); });
+    $("#bPlay").addEventListener("click", () => this.togglePlay());
+    $("#bReset").addEventListener("click", () => this.reset());
+    this.reset();
+  },
+  ui(){
+    const n = this.steps.length, done = this.idx;
+    $("#progT").innerHTML = done === 0 ? `시작 전 <b>0 / ${n}</b> · [단계별 진행] 또는 [연속 진행]을 누르세요`
+      : `<b>${done} / ${n}</b> 단계 · ${esc(this.steps[done - 1].name)}${done === n ? " · 완료" : ""}`;
+    $("#progBar").style.width = (done / n * 100) + "%";
+    document.querySelectorAll("#nav span").forEach((s, i) => { s.className = i < done - 1 ? "done" : i === done - 1 ? "now" : ""; });
+    const end = done >= n;
+    $("#bStep").disabled = end || this.busy || this.playing;
+    $("#bPlay").disabled = end;
+    $("#bPlay").textContent = this.playing ? "일시정지" : (done > 0 && !end ? "이어서 진행" : "연속 진행");
+    $("#bPlay").classList.toggle("primary", !this.playing);
+  },
+  async next(){
+    if (this.busy || this.idx >= this.steps.length) return false;
+    this.busy = true; this.ui();
+    const my = this.token, i = this.idx;
+    document.querySelectorAll("section.scene.current").forEach(s => s.classList.remove("current"));
+    const sec = document.createElement("section");
+    sec.className = "scene current"; sec.id = "scene" + (i + 1);
+    $("#stage").appendChild(sec);
+    try { await this.steps[i].run(sec, () => my !== this.token); } catch (e) { console.error(e); }
+    if (my !== this.token) return false;          // 처음부터 다시 보기로 취소됨
+    this.idx = i + 1;
+    sec.scrollIntoView({behavior: "smooth", block: "start"});
+    this.ui();
+    await sleep(600);                             // 빠른 연타로 다음 단계가 바로 넘어가지 않게 잠깐 막음
+    if (my !== this.token) return false;
+    this.busy = false; this.ui();
+    return true;
+  },
+  togglePlay(){ this.playing ? this.stopAuto() : this.startAuto(); },
+  async startAuto(){
+    if (this.playing || this.idx >= this.steps.length) return;
+    this.playing = true; this.ui();
+    const my = this.token;
+    while (this.playing && my === this.token && this.idx < this.steps.length){
+      if (this.busy){ await sleep(150); continue; }
+      await this.next();
+      if (!this.playing || my !== this.token || this.idx >= this.steps.length) break;
+      for (let t = 0; t < this.DWELL && this.playing && my === this.token; t += 100) await sleep(100);
+    }
+    if (my === this.token){ this.playing = false; this.ui(); }
+  },
+  stopAuto(){ this.playing = false; this.ui(); },
+  reset(){
+    this.token++; this.playing = false; this.busy = false; this.idx = 0;
+    $("#stage").innerHTML = ""; if (this.onReset) this.onReset(); this.ui();
+    window.scrollTo({top: 0});
+  }
+};
+</script><script>// 08 문서 인덱싱 시각화 — DATA는 제작 때 실제 계산 결과(viz_data.json)를 넣은 값
+const COLORS = ["var(--c1)", "var(--c2)", "var(--c3)", "var(--c4)", "var(--c5)"];
+const ETCH_S = DATA.etch_at, ETCH_E = DATA.etch_at + DATA.etch_sentence.length;
+
+// 본문을 글자 구간별로 칠한다: layers = [{s, e, bg, title}] 뒤의 것이 위에 칠해짐
+function paint(layers){
+  const b = DATA.body, cuts = new Set([0, b.length, ETCH_S, ETCH_E]);
+  layers.forEach(l => { cuts.add(l.s); cuts.add(l.e); });
+  const pts = [...cuts].filter(x => x >= 0 && x <= b.length).sort((x, y) => x - y);
+  let html = "";
+  for (let i = 0; i < pts.length - 1; i++){
+    const s = pts[i], e = pts[i + 1], seg = b.slice(s, e);
+    const top = [...layers].reverse().find(l => l.s <= s && e <= l.e);
+    const cls = (s >= ETCH_S && e <= ETCH_E) ? "mark-etch" : "";
+    html += `<span class="${cls}" style="${top ? `background:${top.bg};` : ""}" title="${esc(top ? top.title : "")}">${esc(seg)}</span>`;
+  }
+  return `<div class="body">${html}</div>`;
+}
+function chunkList(set, selIds, key){
+  return set.map((c, i) => `<button type="button" class="pick ${selIds.includes(c.id) ? "sel" : ""}" data-k="${key}" data-id="${c.id}" style="border-left:6px solid ${COLORS[i % 5]}">
+    <span class="id">${c.id}</span> · ${c.start}~${c.end}자 (${c.end - c.start}자)${c.has_etch ? " · <b>식각 문장 전체 포함</b>" : ""}<br>
+    <span style="color:var(--muted)">${esc(c.text.slice(0, 46))}…</span></button>`).join("");
+}
+function chunkScene(sec, ov, sel, extraNote){
+  const set = DATA.chunks[ov];
+  const draw = ids => {
+    const layers = set.map((c, i) => ({s: c.start, e: c.end, bg: ids.includes(c.id) ? COLORS[i % 5] : "transparent", title: c.id}));
+    if (ov === "60" && ids.length === 2){
+      const [a, b] = ids.map(id => set.find(c => c.id === id)).sort((x, y) => x.start - y.start);
+      if (b.start < a.end) layers.push({s: b.start, e: a.end, bg: "var(--both)", title: `${a.id}·${b.id} 공통`});
+    }
+    $(".bodybox", sec).innerHTML = paint(layers);
+    $(".list", sec).innerHTML = chunkList(set, ids, ov);
+    $(".detail", sec).innerHTML = ids.map(id => { const c = set.find(x => x.id === id);
+      return `<dl class="kv"><dt>조각 ID</dt><dd class="mono">${c.id}</dd><dt>시작~끝</dt><dd>${c.start}~${c.end}자</dd><dt>원문</dt><dd>${esc(c.text)}</dd></dl>`; }).join("<hr style='border:0;border-top:1px dashed var(--border)'>") + (extraNote ? extraNote(ids) : "");
+    $(".list", sec).querySelectorAll(".pick").forEach(b => b.addEventListener("click", () => {
+      let next = [b.dataset.id];
+      if (ov === "60"){ const i = set.findIndex(c => c.id === b.dataset.id); next = [set[i].id, (set[i + 1] || set[i - 1]).id]; }
+      draw(next);
+    }));
+  };
+  sec.insertAdjacentHTML("beforeend", `<div class="grid2"><div><div class="bodybox"></div><div class="detail" style="margin-top:10px"></div></div><div class="list"></div></div>`);
+  draw(sel);
+}
+
+const STEPS = [
+  {name: "문서와 원문", run(sec){
+    sec.innerHTML = `<h2>① 문서와 원문</h2><p class="lead">PDF에서 글자를 꺼낸 본문입니다. 밑줄은 이후 모든 단계에서 따라갈 식각 문장입니다(본문 ${ETCH_S}~${ETCH_E}자).</p>
+      <div class="pages"><div class="pg">문서<br><strong>${esc(DATA.source)}</strong><br>${esc(DATA.title)}</div>
+      <div class="pg">책에 인쇄된 쪽<br><b>${DATA.book_page}쪽</b></div><div class="pg">PDF 뷰어의 페이지<br><b>${DATA.pdf_page}번째</b><br><span class="sub">코드에서는 0부터 세어 pages[${DATA.pdf_page - 1}]</span></div></div>
+      <div style="margin-top:10px">${paint([])}</div><p class="sub">본문 ${DATA.body.length}자 · 그림 속 짧은 이름표는 제외 · <a href="${DATA.url}" target="_blank" rel="noopener">발행처 원문 8번째 페이지 ↗</a>(인터넷 연결 시)</p>`;
+  }},
+  {name: "겹침 0으로 청킹", run(sec){
+    sec.innerHTML = `<h2>② ${DATA.chunk_size}자씩 자르기 · 겹침 0</h2><p class="lead">${DATA.chunk_size}자마다 자르면 ${DATA.chunks["0"].length}개 조각이 됩니다. 조각을 누르면 원문의 같은 범위가 같은 색으로 칠해집니다.</p>`;
+    const cut = DATA.chunks["0"].filter(c => c.start < ETCH_E && c.end > ETCH_S).map(c => c.id);
+    chunkScene(sec, "0", cut, () => `<div class="note warn">식각 문장(${ETCH_S}~${ETCH_E}자)이 ${cut.join("와 ")}의 경계(${DATA.chunks["0"].find(c => c.id === cut[0]).end}자)에서 둘로 나뉩니다. 어느 조각에도 문장 전체가 없습니다.</div>`);
+  }},
+  {name: "겹침 60으로 비교", run(sec){
+    const set = DATA.chunks["60"], whole = set.find(c => c.has_etch), i = set.indexOf(whole), prev = set[i - 1];
+    const real = prev.end - whole.start;
+    sec.innerHTML = `<h2>③ 같은 ${DATA.chunk_size}자 · 겹침만 60자</h2><p class="lead">다음 조각이 앞 조각의 마지막 60자부터 시작합니다. 빨간 칸이 두 조각에 함께 들어간 실제 구절입니다.</p>
+      <table class="t"><tr><th>설정</th><th>조각 수</th><th>조각 시작 위치</th></tr>
+      <tr><td>겹침 0</td><td>${DATA.chunks["0"].length}</td><td class="mono">${DATA.chunks["0"].map(c => c.start).join(" · ")}</td></tr>
+      <tr><td>겹침 60</td><td>${set.length}</td><td class="mono">${set.map(c => c.start).join(" · ")}</td></tr></table>`;
+    chunkScene(sec, "60", [prev.id, whole.id], () => `<div class="note ok">설정한 겹침 60자 · 실제로 겹친 글자 ${real}자(${whole.start}~${prev.end}자): “${esc(DATA.body.slice(whole.start, prev.end))}”<br>
+      ${whole.id}(${whole.start}~${whole.end}자)에 식각 문장 전체${whole.has_photo ? "와 포토 문장 전체" : ""}가 들어갑니다.</div>`);
+  }},
+  {name: "청크를 임베딩으로", run(sec){
+    const c = DATA.chunks["60"].find(x => x.has_etch), head = DATA.heads[c.id];
+    sec.innerHTML = `<h2>④ 조각 하나를 숫자 목록(벡터)으로</h2><p class="lead">대표 조각 ${c.id}를 임베딩 모델에 넣은 실제 결과입니다. 문서 조각과 질문은 같은 모델로 바꿔야 비교할 수 있습니다.</p>
+      <div class="flow"><div class="box"><div class="h">원문(${c.start}~${c.end}자)</div>${esc(c.text)}</div><div class="arr">→</div>
+      <div class="box" style="flex:0 1 150px"><div class="h">조각 ID</div><span class="mono">${c.id}</span></div><div class="arr">→</div>
+      <div class="box"><div class="h">text-embedding-3-small 반환 벡터</div><span class="mono">[${head.map(v => v.toFixed(6)).join(", ")}, … ]</span><br>앞 ${head.length}개만 표시 · 전체 <b>${DATA.dim}차원</b></div></div>
+      <div class="note">벡터 값 하나하나에 사람이 읽을 뜻은 없습니다. 비슷한 내용의 글은 가까운 벡터가 됩니다.</div>`;
+  }},
+  {name: "Chroma 인덱싱 완료", run(sec){
+    const set = DATA.chunks["60"];
+    sec.innerHTML = `<h2>⑤ Chroma에 저장 완료</h2><p class="lead">조각마다 원문·벡터·메타데이터(문서명·쪽)를 같은 ID로 저장했습니다. 저장 건수 <b>${DATA.stored_count}건</b> · 같은 ID로 다시 저장하면 새로 추가 <b>${DATA.readd_new}건</b>. 행을 누르면 원문 위치와 저장 레코드가 함께 보입니다.</p>
+      <div class="grid2"><div><table class="t" id="recs"><tr><th>ID</th><th>원문 위치</th><th>벡터(앞 3개)</th><th>메타데이터</th></tr>
+      ${set.map(c => `<tr class="click" data-id="${c.id}"><td class="mono">${c.id}</td><td>${c.start}~${c.end}자</td><td class="mono">${DATA.heads[c.id].slice(0, 3).map(v => v.toFixed(3)).join(", ")}, …</td><td>책자 ${DATA.book_page}쪽 · PDF ${DATA.pdf_page}</td></tr>`).join("")}
+      </table><div class="rec" style="margin-top:10px"></div></div><div class="bodybox2"></div></div>`;
+    const show = id => {
+      const c = set.find(x => x.id === id), i = set.indexOf(c);
+      sec.querySelectorAll("#recs tr").forEach(r => r.classList.toggle("sel", r.dataset.id === id));
+      $(".bodybox2", sec).innerHTML = paint([{s: c.start, e: c.end, bg: COLORS[i % 5], title: id}]);
+      $(".rec", sec).innerHTML = `<dl class="kv"><dt>id</dt><dd class="mono">${c.id}</dd><dt>document</dt><dd>${esc(c.text)}</dd>
+        <dt>embedding</dt><dd class="mono">[${DATA.heads[c.id].map(v => v.toFixed(4)).join(", ")}, …] (${DATA.dim}차원)</dd>
+        <dt>metadata</dt><dd>${esc(DATA.source)} · 책자 ${DATA.book_page}쪽 · PDF ${DATA.pdf_page}번째 페이지 · ${c.start}~${c.end}자</dd></dl>`;
+    };
+    sec.querySelectorAll("#recs tr.click").forEach(r => r.addEventListener("click", () => show(r.dataset.id)));
+    show(set.find(c => c.has_etch).id);
+  }}
+];
+Player.init(STEPS);
+</script>
+</body></html>

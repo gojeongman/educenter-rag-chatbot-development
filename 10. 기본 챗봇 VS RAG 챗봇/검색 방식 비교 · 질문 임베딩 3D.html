@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<!-- saved from url=(0194)https://cdn-api.elice.io/api-attachment/attachment/d1926e50c83c425faeeef9e42a30c4f3/10_%EA%B2%80%EC%83%89%EB%B0%A9%EC%8B%9D%EB%B9%84%EA%B5%90_%EC%A7%88%EB%AC%B8%EC%9E%84%EB%B2%A0%EB%94%A93D.html -->
+<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10 검색 방식 비교 · 질문 임베딩 3D</title><style>:root{--bg:#f4f4f5;--card:#fff;--fg:#18181b;--muted:#71717a;--border:#e4e4e7;--primary:#18181b;--on-primary:#fafafa;
+  --accent:#2563eb;--accent-bg:#eff6ff;--ok:#15803d;--ok-bg:#f0fdf4;--warn:#b45309;--warn-bg:#fffbeb;--violet:#7c3aed;--violet-bg:#f5f3ff;
+  --c1:#dbeafe;--c2:#fde68a;--c3:#bbf7d0;--c4:#fbcfe8;--c5:#ddd6fe;--both:#fca5a5;--r:8px;
+  --font:"Pretendard","Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.6 var(--font)}
+button{font:inherit;color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:16px 14px 40px}
+header.top{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between}
+h1{font-size:19px;margin:0;line-height:1.35}
+.sub{color:var(--muted);font-size:12.5px;margin:2px 0 0}
+.badge{display:inline-block;border-radius:999px;padding:1px 10px;font-size:12px;font-weight:600;background:var(--violet-bg);color:var(--violet);border:1px solid #ddd6fe}
+.ctrl{position:sticky;top:0;z-index:5;margin-top:10px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.prog{flex:1 1 260px;min-width:220px}
+.prog .t{font-weight:600;font-size:13.5px}.prog .t b{color:var(--accent)}
+.bar{height:6px;background:var(--border);border-radius:999px;overflow:hidden;margin-top:4px}.bar>i{display:block;height:100%;background:var(--accent);width:0;transition:width .4s}
+.btn{height:36px;padding:0 14px;border-radius:var(--r);border:1px solid var(--border);background:var(--card);cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--bg)}.btn.primary{background:var(--primary);color:var(--on-primary);border-color:var(--primary)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn:focus-visible,.pick:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.steps-nav{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+.steps-nav span{font-size:12px;border:1px solid var(--border);border-radius:999px;padding:1px 10px;color:var(--muted);background:var(--card)}
+.steps-nav span.done{color:var(--ok);border-color:#bbf7d0;background:var(--ok-bg)}.steps-nav span.now{color:var(--accent);border-color:#bfdbfe;background:var(--accent-bg);font-weight:600}
+section.scene{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-top:12px;animation:rise .35s ease-out}
+section.scene.current{box-shadow:0 0 0 2px var(--accent)}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+section.scene h2{font-size:16px;margin:0 0 2px}.scene .lead{color:var(--muted);margin:0 0 10px;font-size:13px}
+.grid2{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px}
+@media (max-width:820px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.body{background:#fafafa;border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;line-height:1.9;font-size:13.5px;word-break:keep-all;overflow-wrap:anywhere}
+.mark-etch{text-decoration:underline 2px var(--accent);text-underline-offset:3px}
+.pick{display:block;width:100%;text-align:left;border:1px solid var(--border);border-radius:var(--r);background:var(--card);padding:6px 10px;margin-bottom:6px;cursor:pointer;font-size:13px}
+.pick.sel{box-shadow:inset 0 0 0 2px var(--accent)}
+.pick .id{font-weight:700;font-family:Consolas,"D2Coding",monospace;font-size:12.5px}
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;font-size:13px;margin:0}.kv dt{color:var(--muted)}.kv dd{margin:0;overflow-wrap:anywhere}
+.mono{font-family:Consolas,"D2Coding",monospace;font-size:12.5px}
+.note{font-size:12.5px;border-radius:6px;padding:6px 10px;margin-top:8px;background:var(--bg);color:var(--muted)}
+.note.warn{background:var(--warn-bg);color:#92400e;border:1px solid #fde68a}.note.ok{background:var(--ok-bg);color:var(--ok);border:1px solid #bbf7d0}
+table.t{border-collapse:collapse;width:100%;font-size:13px}
+table.t th,table.t td{border-bottom:1px solid var(--border);padding:5px 6px;text-align:left;vertical-align:top}
+table.t th{color:var(--muted);font-weight:600;font-size:12px}
+table.t tr.sel td{background:var(--accent-bg)}
+table.t tr.click{cursor:pointer}
+.tag{display:inline-block;border-radius:6px;padding:0 6px;font-size:11.5px;font-weight:600}
+.tag.same{background:var(--bg);color:var(--muted)}.tag.new{background:var(--warn-bg);color:var(--warn)}.tag.move{background:var(--violet-bg);color:var(--violet)}
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px}
+.flow .box{flex:1 1 160px;border:1px solid var(--border);border-radius:var(--r);padding:8px 10px;background:#fafafa;min-width:0}
+.flow .arr{align-self:center;color:var(--accent);font-weight:700}
+.box .h{font-size:12px;color:var(--muted);font-weight:600}
+.pages{display:flex;gap:10px;flex-wrap:wrap}
+.pages .pg{border:1px solid var(--border);border-radius:var(--r);padding:8px 12px;background:#fafafa}
+.pages .pg b{font-size:20px;color:var(--accent)}
+.foot{color:var(--muted);font-size:12px;margin-top:14px}
+</style></head>
+<body><div class="wrap">
+<header class="top"><div><h1>10 검색 방식 비교 · 질문 임베딩 3D</h1><p class="sub">BM25 · 벡터 · MMR 결과 비교와 질문 위치, 5단계</p></div>
+<div><span class="badge">미리 계산한 실습 결과</span><p class="sub" style="text-align:right">text-embedding-3-small로 실제 계산한 값을 담아 둠 · 인터넷 없이 재생</p></div></header>
+<div class="ctrl"><div class="prog"><div class="t" id="progT">시작 전 <b>0 / 5</b> · [단계별 진행] 또는 [연속 진행]을 누르세요</div><div class="bar"><i id="progBar" style="width: 0%;"></i></div></div>
+<button type="button" class="btn" id="bStep">단계별 진행</button><button type="button" class="btn primary" id="bPlay">연속 진행</button>
+<button type="button" class="btn" id="bReset">처음부터 다시 보기</button></div>
+<div class="steps-nav" id="nav"><span data-i="0" class="">1. 문서와 첫 질문</span><span data-i="1" class="">2. 세 가지 검색 결과</span><span data-i="2" class="">3. 질문과 청크의 3D</span><span data-i="3" class="">4. 두 번째 질문으로 전환</span><span data-i="4" class="">5. 전후 비교</span></div>
+<section class="scene" style="animation:none"><h2>오늘의 질문: 같은 문서를 검색해도 어떤 청크를 고르는지가 왜 달라질까?</h2>
+<p class="lead" style="margin:0">문서: 삼일PwC 『반도체 산업 Business Guidebook』(2025.12) · 책자 6쪽(PDF 뷰어 8번째 페이지) ‘2. 반도체 Value Chain Overview (8대 공정)’ · 입력할 것은 없습니다. 아래 버튼으로 진행하세요.</p></section>
+<div id="stage"></div>
+<p class="foot">출처: 삼일PwC 『반도체 산업 Business Guidebook』(2025.12) 책자 6쪽 발췌(시연에 필요한 본문만 수록). 계산: text-embedding-3-small · 제작용 런박스에서 실제 호출. 조각·벡터·순위·좌표·저장 건수는 실제 실행 결과입니다.</p>
+</div><script>const DATA = {"computed": "text-embedding-3-small · 제작용 런박스에서 실제 호출", "source": "삼일PwC 『반도체 산업 Business Guidebook』(2025.12)", "title": "2. 반도체 Value Chain Overview (8대 공정)", "book_page": 6, "pdf_page": 8, "url": "https://www.pwc.com/kr/ko/insights/industry-focus/samilpwc_semicon-guidebook.pdf#page=8", "body": "웨이퍼 제조의 경우, 실리콘 잉곳(Ingot)의 제조와 이를 절단, 연마, 세척하여, 최종 검사를 통해 웨이퍼를 생산하는 공정을 의미한다. 잉곳은 웨이퍼로 제조되기 전의 실리콘 기둥으로, 이를 절단하여 반도체의 기초 제조인 웨이퍼를 생산한다. 이러한 웨이퍼 제조 공정을 통해 생산된 웨이퍼는 산화-포토-식각 공정을 거쳐 회로가 주입된다. 산화공정은 웨이퍼 표면에 산화막을 형성하는 과정으로, 산화막은 이후 과정인 식각 및 이온 주입 과정에서 방지막 역할을 수행하여, 웨이퍼가 설계된 회로대로 제조될 수 있도록 한다. 포토공정은 웨이퍼에 회로를 그려넣는 과정으로, 감광액 도포 후 노광, 현상하는 방식으로 진행된다. 식각 공정에서는 포토공정에서 입혀진 감광액을 제외한 부분을 깎아내게 되며, 이후 증착 및 이온주입공정을 통해 전기적 특성을 부여하게 된다 (8대 공정에 포함되어 있지는 않지만, 산화-포토-식각 과정에서 발생하는 불순물을 제거하기 위한 세정 공정을 거친다.) 금속배선 공정을 통해 배선까지 완료된 반도체에 테스트 및 패키징 공정이 진행되며 이러한 공정은 통상 후공정으로 지칭된다. 테스트 공정에서는 웨이퍼 내의 개별 Die 품질을 테스트하게 되며, 이중 양품을 절단하여 칩으로 제조한다. 절단된 칩은 패키징 과정을 거치게 되며, 패키징 테스트 이후 최종 제품으로 판매된다.", "chunk_size": 200, "etch_sentence": "식각 공정에서는 포토공정에서 입혀진 감광액을 제외한 부분을 깎아내게 되며, 이후 증착 및 이온주입공정을 통해 전기적 특성을 부여하게 된다", "photo_sentence": "포토공정은 웨이퍼에 회로를 그려넣는 과정으로, 감광액 도포 후 노광, 현상하는 방식으로 진행된다.", "etch_at": 344, "photo_at": 289, "chunks": {"0": [{"id": "pwc-p8-c01", "start": 0, "end": 200, "text": "웨이퍼 제조의 경우, 실리콘 잉곳(Ingot)의 제조와 이를 절단, 연마, 세척하여, 최종 검사를 통해 웨이퍼를 생산하는 공정을 의미한다. 잉곳은 웨이퍼로 제조되기 전의 실리콘 기둥으로, 이를 절단하여 반도체의 기초 제조인 웨이퍼를 생산한다. 이러한 웨이퍼 제조 공정을 통해 생산된 웨이퍼는 산화-포토-식각 공정을 거쳐 회로가 주입된다. 산화공정은 웨이퍼 표", "has_etch": false, "has_photo": false}, {"id": "pwc-p8-c02", "start": 200, "end": 400, "text": "면에 산화막을 형성하는 과정으로, 산화막은 이후 과정인 식각 및 이온 주입 과정에서 방지막 역할을 수행하여, 웨이퍼가 설계된 회로대로 제조될 수 있도록 한다. 포토공정은 웨이퍼에 회로를 그려넣는 과정으로, 감광액 도포 후 노광, 현상하는 방식으로 진행된다. 식각 공정에서는 포토공정에서 입혀진 감광액을 제외한 부분을 깎아내게 되며, 이후 증착 및 이온주입공정", "has_etch": false, "has_photo": true}, {"id": "pwc-p8-c03", "start": 400, "end": 600, "text": "을 통해 전기적 특성을 부여하게 된다 (8대 공정에 포함되어 있지는 않지만, 산화-포토-식각 과정에서 발생하는 불순물을 제거하기 위한 세정 공정을 거친다.) 금속배선 공정을 통해 배선까지 완료된 반도체에 테스트 및 패키징 공정이 진행되며 이러한 공정은 통상 후공정으로 지칭된다. 테스트 공정에서는 웨이퍼 내의 개별 Die 품질을 테스트하게 되며, 이중 양품을", "has_etch": false, "has_photo": false}, {"id": "pwc-p8-c04", "start": 600, "end": 663, "text": " 절단하여 칩으로 제조한다. 절단된 칩은 패키징 과정을 거치게 되며, 패키징 테스트 이후 최종 제품으로 판매된다.", "has_etch": false, "has_photo": false}], "60": [{"id": "pwc-p8-c01", "start": 0, "end": 200, "text": "웨이퍼 제조의 경우, 실리콘 잉곳(Ingot)의 제조와 이를 절단, 연마, 세척하여, 최종 검사를 통해 웨이퍼를 생산하는 공정을 의미한다. 잉곳은 웨이퍼로 제조되기 전의 실리콘 기둥으로, 이를 절단하여 반도체의 기초 제조인 웨이퍼를 생산한다. 이러한 웨이퍼 제조 공정을 통해 생산된 웨이퍼는 산화-포토-식각 공정을 거쳐 회로가 주입된다. 산화공정은 웨이퍼 표", "has_etch": false, "has_photo": false}, {"id": "pwc-p8-c02", "start": 140, "end": 340, "text": "웨이퍼 제조 공정을 통해 생산된 웨이퍼는 산화-포토-식각 공정을 거쳐 회로가 주입된다. 산화공정은 웨이퍼 표면에 산화막을 형성하는 과정으로, 산화막은 이후 과정인 식각 및 이온 주입 과정에서 방지막 역할을 수행하여, 웨이퍼가 설계된 회로대로 제조될 수 있도록 한다. 포토공정은 웨이퍼에 회로를 그려넣는 과정으로, 감광액 도포 후 노광, 현상하는 방식으로 진행", "has_etch": false, "has_photo": false}, {"id": "pwc-p8-c03", "start": 280, "end": 480, "text": " 있도록 한다. 포토공정은 웨이퍼에 회로를 그려넣는 과정으로, 감광액 도포 후 노광, 현상하는 방식으로 진행된다. 식각 공정에서는 포토공정에서 입혀진 감광액을 제외한 부분을 깎아내게 되며, 이후 증착 및 이온주입공정을 통해 전기적 특성을 부여하게 된다 (8대 공정에 포함되어 있지는 않지만, 산화-포토-식각 과정에서 발생하는 불순물을 제거하기 위한 세정 공정", "has_etch": true, "has_photo": true}, {"id": "pwc-p8-c04", "start": 420, "end": 620, "text": " (8대 공정에 포함되어 있지는 않지만, 산화-포토-식각 과정에서 발생하는 불순물을 제거하기 위한 세정 공정을 거친다.) 금속배선 공정을 통해 배선까지 완료된 반도체에 테스트 및 패키징 공정이 진행되며 이러한 공정은 통상 후공정으로 지칭된다. 테스트 공정에서는 웨이퍼 내의 개별 Die 품질을 테스트하게 되며, 이중 양품을 절단하여 칩으로 제조한다. 절단된 ", "has_etch": false, "has_photo": false}, {"id": "pwc-p8-c05", "start": 560, "end": 663, "text": "공정에서는 웨이퍼 내의 개별 Die 품질을 테스트하게 되며, 이중 양품을 절단하여 칩으로 제조한다. 절단된 칩은 패키징 과정을 거치게 되며, 패키징 테스트 이후 최종 제품으로 판매된다.", "has_etch": false, "has_photo": false}]}, "dim": 1536, "heads": {"pwc-p8-c01": [-0.008644, 0.010674, 0.008522, 0.026535, 0.045898, -0.028152, 0.056702, 0.018875], "pwc-p8-c02": [-0.020721, -0.006248, 0.006104, 0.032349, -0.02356, -0.026947, 0.014122, 0.036133], "pwc-p8-c03": [-0.032501, 0.002571, 0.015808, 0.044495, -0.013985, -0.002134, 0.002407, 0.004871], "pwc-p8-c04": [-0.002842, -0.006283, 0.002176, 0.011597, 0.005318, -0.016312, 0.004196, 0.024796], "pwc-p8-c05": [0.018707, 0.008049, 0.035339, -0.025803, 0.020248, -0.052734, 0.007366, 0.023972]}, "stored_head_c03": [-0.032349, 0.002569, 0.015808, 0.044434, -0.013947, -0.002226, 0.002468, 0.00494], "stored_count": 5, "readd_new": 0, "questions": ["식각 공정이란?", "웨이퍼에서 필요한 무늬만 남기고 깎는 단계는?"], "results": {"0": {"vector": [{"id": "pwc-p8-c04", "rank": 1, "distance": 0.6678}, {"id": "pwc-p8-c03", "rank": 2, "distance": 0.6683}, {"id": "pwc-p8-c01", "rank": 3, "distance": 0.8028}], "mmr": [{"id": "pwc-p8-c04", "rank": 1}, {"id": "pwc-p8-c03", "rank": 2}, {"id": "pwc-p8-c01", "rank": 3}], "bm25": [{"id": "pwc-p8-c04", "rank": 1, "score": 1.776}, {"id": "pwc-p8-c03", "rank": 2, "score": 1.081}, {"id": "pwc-p8-c02", "rank": 3, "score": 1.068}]}, "1": {"vector": [{"id": "pwc-p8-c02", "rank": 1, "distance": 0.6332}, {"id": "pwc-p8-c01", "rank": 2, "distance": 0.651}, {"id": "pwc-p8-c05", "rank": 3, "distance": 0.6919}], "mmr": [{"id": "pwc-p8-c02", "rank": 1}, {"id": "pwc-p8-c01", "rank": 2}, {"id": "pwc-p8-c05", "rank": 3}], "bm25": [{"id": "pwc-p8-c03", "rank": 1, "score": 1.466}, {"id": "pwc-p8-c02", "rank": 2, "score": 1.44}, {"id": "pwc-p8-c05", "rank": 3, "score": 0.575}]}}, "pca": {"ratio": [0.4066, 0.3183, 0.1526], "chunks": {"pwc-p8-c01": [-0.27295, 0.54302, -0.25417], "pwc-p8-c02": [-0.3546, 0.07111, 0.36106], "pwc-p8-c03": [-0.342, -0.53044, -0.07636], "pwc-p8-c04": [0.38022, -0.19771, -0.24163], "pwc-p8-c05": [0.58933, 0.11402, 0.21111]}, "questions": [[0.0064, -0.1542, -0.19095], [-0.04566, 0.09275, 0.05562]]}, "settings": {"bm25": "공백 제거 후 글자 2-gram, k1=1.5, b=0.75", "mmr": "후보 fetch_k=5(조각 5개 전부), lambda_mult=0.5", "vector": "Chroma 코사인 거리, k=3", "filter": "없음(문서 범위 = 책자 6쪽 한 쪽)"}};</script><script>// 단계 재생기: STEPS = [{name, run(sceneEl) → Promise|void}] / 한 번에 한 단계, 연속 진행·일시정지·처음부터
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const Player = {
+  idx: 0, busy: false, playing: false, timer: null, token: 0, DWELL: 5200,
+  init(steps, onReset){
+    this.steps = steps; this.onReset = onReset;
+    $("#nav").innerHTML = steps.map((s, i) => `<span data-i="${i}">${i + 1}. ${esc(s.name)}</span>`).join("");
+    $("#bStep").addEventListener("click", () => { this.stopAuto(); this.next(); });
+    $("#bPlay").addEventListener("click", () => this.togglePlay());
+    $("#bReset").addEventListener("click", () => this.reset());
+    this.reset();
+  },
+  ui(){
+    const n = this.steps.length, done = this.idx;
+    $("#progT").innerHTML = done === 0 ? `시작 전 <b>0 / ${n}</b> · [단계별 진행] 또는 [연속 진행]을 누르세요`
+      : `<b>${done} / ${n}</b> 단계 · ${esc(this.steps[done - 1].name)}${done === n ? " · 완료" : ""}`;
+    $("#progBar").style.width = (done / n * 100) + "%";
+    document.querySelectorAll("#nav span").forEach((s, i) => { s.className = i < done - 1 ? "done" : i === done - 1 ? "now" : ""; });
+    const end = done >= n;
+    $("#bStep").disabled = end || this.busy || this.playing;
+    $("#bPlay").disabled = end;
+    $("#bPlay").textContent = this.playing ? "일시정지" : (done > 0 && !end ? "이어서 진행" : "연속 진행");
+    $("#bPlay").classList.toggle("primary", !this.playing);
+  },
+  async next(){
+    if (this.busy || this.idx >= this.steps.length) return false;
+    this.busy = true; this.ui();
+    const my = this.token, i = this.idx;
+    document.querySelectorAll("section.scene.current").forEach(s => s.classList.remove("current"));
+    const sec = document.createElement("section");
+    sec.className = "scene current"; sec.id = "scene" + (i + 1);
+    $("#stage").appendChild(sec);
+    try { await this.steps[i].run(sec, () => my !== this.token); } catch (e) { console.error(e); }
+    if (my !== this.token) return false;          // 처음부터 다시 보기로 취소됨
+    this.idx = i + 1;
+    sec.scrollIntoView({behavior: "smooth", block: "start"});
+    this.ui();
+    await sleep(600);                             // 빠른 연타로 다음 단계가 바로 넘어가지 않게 잠깐 막음
+    if (my !== this.token) return false;
+    this.busy = false; this.ui();
+    return true;
+  },
+  togglePlay(){ this.playing ? this.stopAuto() : this.startAuto(); },
+  async startAuto(){
+    if (this.playing || this.idx >= this.steps.length) return;
+    this.playing = true; this.ui();
+    const my = this.token;
+    while (this.playing && my === this.token && this.idx < this.steps.length){
+      if (this.busy){ await sleep(150); continue; }
+      await this.next();
+      if (!this.playing || my !== this.token || this.idx >= this.steps.length) break;
+      for (let t = 0; t < this.DWELL && this.playing && my === this.token; t += 100) await sleep(100);
+    }
+    if (my === this.token){ this.playing = false; this.ui(); }
+  },
+  stopAuto(){ this.playing = false; this.ui(); },
+  reset(){
+    this.token++; this.playing = false; this.busy = false; this.idx = 0;
+    $("#stage").innerHTML = ""; if (this.onReset) this.onReset(); this.ui();
+    window.scrollTo({top: 0});
+  }
+};
+</script><script>// 10 검색 방식 비교 · 질문 임베딩 3D — DATA는 제작 때 실제 계산 결과(viz_data.json)
+const CH = DATA.chunks["60"], byId = Object.fromEntries(CH.map(c => [c.id, c]));
+const METHODS = [{k: "vector", name: "벡터 검색(Chroma 코사인)"}, {k: "bm25", name: "BM25 키워드 검색"}, {k: "mmr", name: "MMR(다양성 반영)"}];
+const MCOLOR = {vector: "#2563eb", bm25: "#b45309", mmr: "#7c3aed"};
+const S = {q: 0, method: "vector", sel: null, rotX: -0.45, rotY: 0.6, canvas: null};
+
+function res(q, m){ return DATA.results[String(q)][m]; }
+function tagFor(q, m, r){
+  if (m === "vector") return `<span class="tag same">기준</span>`;
+  const base = res(q, "vector").find(x => x.id === r.id);
+  if (!base) return `<span class="tag new">새로 선택</span>`;
+  return base.rank === r.rank ? `<span class="tag same">공통·같은 순위</span>` : `<span class="tag move">공통·${base.rank}위→${r.rank}위</span>`;
+}
+function table(q, m, sel){
+  const rows = res(q, m), dropped = res(q, "vector").filter(v => !rows.find(r => r.id === v.id));
+  return `<table class="t"><tr><th>순위</th><th>조각 ID</th><th>원문 발췌</th><th>쪽</th><th>벡터 결과와 비교</th></tr>
+    ${rows.map(r => `<tr class="click ${sel === r.id ? "sel" : ""}" data-id="${r.id}"><td>${r.rank}</td><td class="mono">${r.id}</td>
+      <td>${esc(byId[r.id].text.slice(0, 38))}…</td><td>책자 ${DATA.book_page}·PDF ${DATA.pdf_page}</td><td>${tagFor(q, m, r)}</td></tr>`).join("")}
+    </table>${m !== "vector" && dropped.length ? `<div class="sub">벡터 결과에서 빠진 조각: ${dropped.map(d => d.id).join(", ")}</div>` : ""}`;
+}
+function detail(id){
+  if (!id) return `<p class="sub">결과 행이나 3D 점을 누르면 조각 원문이 열립니다.</p>`;
+  const c = byId[id];
+  return `<dl class="kv"><dt>조각 ID</dt><dd class="mono">${id}</dd><dt>위치</dt><dd>${esc(DATA.source)} · 책자 ${DATA.book_page}쪽 · PDF ${DATA.pdf_page}번째 페이지 · ${c.start}~${c.end}자</dd><dt>원문</dt><dd>${esc(c.text)}</dd></dl>`;
+}
+
+// ---- 3D: 문서 조각으로 맞춘 PCA 좌표(고정) + 질문 투영 점. 회전은 화면 표시만 바꾼다.
+const ALL = [...Object.values(DATA.pca.chunks), ...DATA.pca.questions];
+const SCALE = 1 / Math.max(...ALL.flat().map(Math.abs));
+function project(p, w, h){
+  const [x0, y0, z0] = p.map(v => v * SCALE);
+  const cy = Math.cos(S.rotY), sy = Math.sin(S.rotY), cx = Math.cos(S.rotX), sx = Math.sin(S.rotX);
+  const x1 = x0 * cy + z0 * sy, z1 = -x0 * sy + z0 * cy, y1 = y0 * cx - z1 * sx, z2 = y0 * sx + z1 * cx;
+  const f = 3.2 / (3.2 + z2), k = Math.min(w, h) * 0.36;
+  return [w / 2 + x1 * k * f, h / 2 - y1 * k * f, z2];
+}
+function draw3d(){
+  const cv = S.canvas; if (!cv || !cv.isConnected) return;
+  const r = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+  cv.width = w * r; cv.height = h * r;
+  const g = cv.getContext("2d"); g.setTransform(r, 0, 0, r, 0, 0); g.clearRect(0, 0, w, h);
+  g.font = "12px sans-serif";
+  [[1, 0, 0, "PC1"], [0, 1, 0, "PC2"], [0, 0, 1, "PC3"]].forEach(([a, b, c, n], i) => {
+    const o = project([0, 0, 0].map(v => v / SCALE), w, h), e = project([a, b, c].map(v => v * 0.8 / SCALE), w, h);
+    g.strokeStyle = "#d4d4d8"; g.beginPath(); g.moveTo(o[0], o[1]); g.lineTo(e[0], e[1]); g.stroke();
+    g.fillStyle = "#a1a1aa"; g.fillText(`${n} ${(DATA.pca.ratio[i] * 100).toFixed(1)}%`, e[0] + 3, e[1]);
+  });
+  const ret = res(S.q, S.method), items = [];
+  Object.entries(DATA.pca.chunks).forEach(([id, p]) => items.push({id, p: project(p, w, h)}));
+  items.sort((a, b) => b.p[2] - a.p[2]).forEach(({id, p}) => {
+    const hit = ret.find(x => x.id === id);
+    g.beginPath(); g.arc(p[0], p[1], 7, 0, Math.PI * 2); g.fillStyle = id === S.sel ? "#93c5fd" : "#e4e4e7"; g.fill();
+    if (hit){ g.lineWidth = 3; g.strokeStyle = MCOLOR[S.method]; g.stroke(); g.fillStyle = MCOLOR[S.method]; g.font = "bold 12px sans-serif"; g.fillText(hit.rank + "위", p[0] + 9, p[1] - 8); }
+    g.fillStyle = "#3f3f46"; g.font = "11px sans-serif"; g.fillText(id.replace("pwc-p8-", ""), p[0] + 9, p[1] + 12);
+  });
+  const qp = project(DATA.pca.questions[S.q], w, h);
+  g.fillStyle = "#dc2626"; g.beginPath();
+  for (let i = 0; i < 10; i++){ const a = Math.PI / 5 * i - Math.PI / 2, rr = i % 2 ? 4.5 : 11; g.lineTo(qp[0] + rr * Math.cos(a), qp[1] + rr * Math.sin(a)); }
+  g.closePath(); g.fill(); g.fillStyle = "#991b1b"; g.font = "bold 12px sans-serif"; g.fillText("질문", qp[0] + 12, qp[1] + 4);
+  cv._items = items;
+}
+function mount3d(box){
+  box.innerHTML = `<canvas style="width:100%;height:360px;background:#fafafa;border:1px solid var(--border);border-radius:8px;cursor:grab;touch-action:none" aria-label="질문과 조각의 3D 위치(드래그로 회전)"></canvas>
+    <div class="sub">드래그로 회전 · 점을 누르면 원문 · ★ 질문 · 테두리와 순위 = 현재 검색 방식이 반환한 조각</div>`;
+  const cv = $("canvas", box); S.canvas = cv;
+  let drag = null, moved = false;
+  cv.addEventListener("pointerdown", e => { drag = [e.clientX, e.clientY]; moved = false; cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener("pointermove", e => { if (!drag) return; const dx = e.clientX - drag[0], dy = e.clientY - drag[1];
+    if (Math.abs(dx) + Math.abs(dy) > 2) moved = true; S.rotY += dx * 0.01; S.rotX += dy * 0.01; drag = [e.clientX, e.clientY]; draw3d(); });
+  cv.addEventListener("pointerup", e => { const b = cv.getBoundingClientRect(); drag = null;
+    if (moved) return; const x = e.clientX - b.left, y = e.clientY - b.top;
+    const hit = (cv._items || []).find(it => Math.hypot(it.p[0] - x, it.p[1] - y) < 14); if (hit) select(hit.id); });
+  draw3d();
+}
+// 한 장면 안의 비교 화면(방식 버튼 · 표 · 3D · 원문)을 그린다
+function viewer(sec, q){
+  sec._q = q; sec._m = "vector"; sec._sel = S.sel;
+  sec.insertAdjacentHTML("beforeend", `<div class="flow" style="margin:6px 0 8px">${METHODS.map(m => `<button type="button" class="btn mbtn" data-m="${m.k}">${m.name}</button>`).join("")}</div>
+    <div class="grid2"><div><div class="tbl"></div><div class="det" style="margin-top:10px"></div></div><div class="plot"></div></div>`);
+  sec.querySelectorAll(".mbtn").forEach(b => b.addEventListener("click", () => { sec._m = b.dataset.m; refresh(); }));
+  mount3d($(".plot", sec));
+  sec._viewer = true; refresh();
+}
+function refresh(){
+  const views = [...document.querySelectorAll("section.scene")].filter(s => s._viewer);
+  if (views.length){ const last = views[views.length - 1]; S.q = last._q; S.method = last._m; }
+  views.forEach(sec => {
+    sec.querySelectorAll(".mbtn").forEach(b => b.classList.toggle("primary", b.dataset.m === sec._m));
+    $(".tbl", sec).innerHTML = `<p class="sub">질문: <b>“${esc(DATA.questions[sec._q])}”</b> · ${METHODS.find(m => m.k === sec._m).name} · k=3</p>` + table(sec._q, sec._m, sec._sel);
+    $(".det", sec).innerHTML = detail(sec._sel);
+    $(".tbl", sec).querySelectorAll("tr.click").forEach(r => r.addEventListener("click", () => select(r.dataset.id, sec)));
+  });
+  // 3D는 가장 최근 장면의 캔버스 하나만 쓴다
+  const plots = [...document.querySelectorAll("section.scene .plot")];
+  plots.forEach((p, i) => { if (i < plots.length - 1) p.innerHTML = `<p class="sub">3D 그림은 아래 최신 장면에 있습니다.</p>`; });
+  draw3d();
+}
+function select(id, sec){
+  const views = [...document.querySelectorAll("section.scene")].filter(s => s._viewer);
+  (sec || views[views.length - 1])._sel = id; S.sel = (views[views.length - 1] || {})._sel; refresh();
+}
+
+const STEPS = [
+  {name: "문서와 첫 질문", run(sec){
+    S.q = 0; S.method = "vector"; S.sel = null;
+    sec.innerHTML = `<h2>① 문서와 첫 질문</h2><p class="lead">08과 같은 문서 범위·조각(${DATA.chunk_size}자, 겹침 60자, ${CH.length}개)으로 검색합니다. 비교하는 동안 문서·조각·필터·질문·k를 고정합니다.</p>
+      <dl class="kv"><dt>문서</dt><dd>${esc(DATA.source)} · 책자 ${DATA.book_page}쪽 = PDF ${DATA.pdf_page}번째 페이지 · ${esc(DATA.title)}</dd>
+      <dt>질문</dt><dd><b>“${esc(DATA.questions[0])}”</b></dd><dt>고정 설정</dt><dd>최종 k = 3 · 필터 없음 · 조각 ${CH.map(c => c.id.replace("pwc-p8-", "")).join(", ")}</dd></dl>`;
+  }},
+  {name: "세 가지 검색 결과", async run(sec, cancelled){
+    sec.innerHTML = `<h2>② 세 가지 검색 결과 비교</h2><p class="lead">같은 질문으로 세 방식을 차례로 실행한 결과입니다. 점수 체계가 서로 달라 점수는 비교하지 않고, 벡터 검색 결과를 기준으로 공통·새로 선택·순위 변화만 표시합니다.</p><div class="three" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px"></div>`;
+    for (const m of METHODS){
+      if (cancelled()) return;
+      $(".three", sec).insertAdjacentHTML("beforeend", `<div style="animation:rise .35s"><h3 style="font-size:14px;margin:0 0 4px;color:${MCOLOR[m.k]}">${m.name}</h3>${table(0, m.k)}</div>`);
+      await sleep(650);
+    }
+    sec.insertAdjacentHTML("beforeend", `<div class="note">BM25: 공백을 뺀 글자 2개 묶음이 겹치는 정도(k1=1.5, b=0.75) · MMR: 조각 5개 전부를 후보로(fetch_k=5) 관련성과 중복을 함께 고려(λ=0.5) · 벡터: Chroma 코사인 거리</div>`);
+  }},
+  {name: "질문과 청크의 3D", run(sec){
+    S.sel = res(0, "vector")[0].id;
+    sec.innerHTML = `<h2>③ 질문과 조각의 3D 관계</h2><p class="lead">조각 ${CH.length}개의 실제 임베딩(${DATA.dim}차원)으로 PCA 축 3개를 한 번 맞추고, 같은 모델로 만든 질문 벡터를 그 축에 투영했습니다. 방식 버튼을 바꿔도 점과 카메라는 그대로이고 강조만 바뀝니다.</p>`;
+    viewer(sec, 0);
+  }},
+  {name: "두 번째 질문으로 전환", run(sec){
+    S.sel = res(1, "vector")[0].id;
+    sec.innerHTML = `<h2>④ 질문을 바꾸면</h2><p class="lead">질문을 <b>“${esc(DATA.questions[1])}”</b>로 바꿨습니다. 조각 점·축·카메라 방향은 그대로이고, 질문 점(★)과 검색 결과만 새로 계산한 값입니다.</p>`;
+    viewer(sec, 1);
+  }},
+  {name: "전후 비교", run(sec){
+    const row = m => { const a = res(0, m).map(r => r.id), b = res(1, m).map(r => r.id);
+      const kept = a.filter(x => b.includes(x)).map(x => `${x.replace("pwc-p8-", "")}(${a.indexOf(x) + 1}→${b.indexOf(x) + 1}위)`);
+      return `<tr><td style="color:${MCOLOR[m]}">${METHODS.find(x => x.k === m).name}</td><td class="mono">${a.join(", ")}</td><td class="mono">${b.join(", ")}</td><td>${kept.join(", ") || "없음"}</td><td class="mono">${b.filter(x => !a.includes(x)).join(", ") || "없음"}</td></tr>`; };
+    sec.innerHTML = `<h2>⑤ 두 질문의 결과 비교</h2><p class="lead">같은 문서라도 질문 표현과 검색 방식에 따라 고르는 조각이 달라집니다(실제 계산 결과).</p>
+      <table class="t"><tr><th>방식</th><th>질문 1 “${esc(DATA.questions[0])}”</th><th>질문 2 “${esc(DATA.questions[1])}”</th><th>유지(순위 변화)</th><th>새로 들어온 조각</th></tr>${METHODS.map(m => row(m.k)).join("")}</table>
+      <div class="note warn">3D 그림은 고차원 벡터를 축약한 시각화입니다. 벡터 검색과 MMR은 원래 벡터 공간에서 계산하고 BM25는 텍스트에서 계산합니다. 그림에서 가까워 보이는 점을 실제 검색 순위로 읽지 않습니다(3축이 설명하는 비율 ${(DATA.pca.ratio.reduce((a, b) => a + b) * 100).toFixed(1)}%).</div>`;
+  }}
+];
+Player.init(STEPS, () => { S.q = 0; S.method = "vector"; S.sel = null; S.canvas = null; S.rotX = -0.45; S.rotY = 0.6; });
+window.addEventListener("resize", draw3d);
+</script>
+</body></html>

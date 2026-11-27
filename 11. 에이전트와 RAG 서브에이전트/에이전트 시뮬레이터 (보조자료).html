@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<!-- saved from url=(0200)https://cdn-api.elice.io/api-attachment/attachment/e57e912b11a44780868d37104d35998f/%5B%EB%B6%80%EB%A1%9D%5D%20%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8%20%EC%8B%9C%EB%AE%AC%EB%A0%88%EC%9D%B4%ED%84%B0.html -->
+<html lang="ko" data-theme="dark"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>에이전트 시뮬레이터 (보조자료)</title>
+<style>
+  html[data-theme="dark"] {
+    --bg: #141414;
+    --surface: #1E1E1E;
+    --surface-2: #262626;
+    --ink: #FCFCFC;
+    --ink-2: #D0D0D0;
+    --muted: #A3A3A3;
+    --line: #2E2E2E;
+    --line-strong: #3C3C3C;
+    --accent: #48CC6C;
+    --accent-ink: #0E1A12;
+    --accent-soft: #1C2820;
+    --accent-border: #2C4A36;
+    --accent-hover: #62D884;
+    --ok: #48CC6C;
+    --ok-soft: #1C2820;
+    --warn: #E3A33A;
+    --warn-soft: #2B2316;
+    --err: #F0605A;
+    --err-soft: #2D1817;
+    --code-bg: #2A2A2A;
+    --pre-bg: #111111;
+    --pre-ink: #E6E6E6;
+    --nav-bg: #101010;
+    --th-bg: #262626;
+    --edge: #3C3C3C;
+    --edge-done: #3F7A52;
+    --syn-k: #48CC6C;
+    --syn-s: #E6C07B;
+    --syn-c: #7A7A7A;
+    --wait-pulse: #3A2E18;
+    --mono: "D2Coding", "Consolas", "Menlo", monospace;
+    color-scheme: dark;
+  }
+  html[data-theme="light"] {
+    --bg: #F4F6F4;
+    --surface: #FFFFFF;
+    --surface-2: #F7F9F7;
+    --ink: #1E1E1E;
+    --ink-2: #333333;
+    --muted: #5C635E;
+    --line: #E1E5E1;
+    --line-strong: #C9CFC9;
+    --accent: #15733A;
+    --accent-ink: #FFFFFF;
+    --accent-soft: #E9F7EE;
+    --accent-border: #BFE6CB;
+    --accent-hover: #0F5A2C;
+    --ok: #15733A;
+    --ok-soft: #EAF7EF;
+    --warn: #9A5B00;
+    --warn-soft: #FFF4E0;
+    --err: #C0392B;
+    --err-soft: #FDECEA;
+    --code-bg: #EEF2EE;
+    --pre-bg: #1E1E1E;
+    --pre-ink: #E6E6E6;
+    --nav-bg: #FFFFFF;
+    --th-bg: #F1F5F2;
+    --edge: #C9CFC9;
+    --edge-done: #4E9E68;
+    --syn-k: #48CC6C;
+    --syn-s: #E6C07B;
+    --syn-c: #8A8A8A;
+    --wait-pulse: #FFE2B0;
+    --mono: "D2Coding", "Consolas", "Menlo", monospace;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+    line-height: 1.7; font-size: 17px; word-break: keep-all; }
+  nav { position: fixed; top: 0; left: 0; bottom: 0; width: 250px; overflow-y: auto;
+    background: #fff; border-right: 1px solid var(--line); padding: 24px 16px; font-size: 14px; }
+  nav .brand { font-weight: 700; font-size: 15px; margin-bottom: 16px; line-height: 1.4; }
+  nav ol { list-style: none; padding: 0; margin: 0; }
+  nav li { margin: 2px 0; }
+  nav a { display: block; padding: 5px 10px; border-radius: 6px; color: var(--muted); text-decoration: none; }
+  nav a:hover, nav a.active { background: var(--accent-soft); color: var(--accent); }
+  nav .group { margin: 14px 0 4px 10px; font-size: 12px; color: #8a909c; letter-spacing: .04em; }
+  main { margin-left: 250px; padding: 32px 40px 80px; max-width: 1100px; }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 32px 36px; margin: 0 0 28px; scroll-margin-top: 20px; }
+  .kicker { color: var(--accent); font-weight: 700; font-size: 14px; letter-spacing: .03em; }
+  h1 { font-size: 34px; line-height: 1.3; margin: 6px 0 12px; }
+  h2 { font-size: 26px; line-height: 1.35; margin: 4px 0 16px; }
+  h3 { font-size: 19px; margin: 26px 0 8px; }
+  p { margin: 8px 0; }
+  .lead { font-size: 19px; color: var(--muted); }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 15.5px; }
+  th, td { border: 1px solid var(--line); padding: 8px 12px; text-align: left; vertical-align: top; }
+  th { background: #f4f5f8; font-weight: 600; }
+  td.num, th.num { text-align: right; }
+  code { font-family: var(--mono); background: var(--code-bg); padding: 1px 6px; border-radius: 4px; font-size: .92em; }
+  pre { background: #20232a; color: #e8eaf0; border-radius: 10px; padding: 16px 18px; overflow-x: auto;
+    font-family: var(--mono); font-size: 14.5px; line-height: 1.6; margin: 10px 0; }
+  pre code { background: none; padding: 0; color: inherit; }
+  pre .c { color: #8c96a8; } pre .k { color: #8fb4ff; } pre .s { color: #b5e3a1; }
+  .src { font-size: 13px; color: var(--muted); margin-top: -4px; }
+  .grid { display: grid; gap: 14px; }
+  .g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .box { border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; background: #fbfbfc; }
+  .box h4 { margin: 0 0 6px; font-size: 16px; }
+  .box p { margin: 0; font-size: 15px; color: var(--muted); }
+  .badge { display: inline-block; font-size: 12.5px; font-weight: 700; padding: 2px 9px; border-radius: 999px;
+    vertical-align: middle; margin-left: 6px; }
+  .badge.prop { background: var(--warn-soft); color: var(--warn); }
+  .badge.fix { background: #e6f4ec; color: var(--ok); }
+  .note { border-left: 4px solid var(--accent); background: var(--accent-soft); padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 12px 0; }
+  .caution { border-left: 4px solid var(--warn); background: var(--warn-soft); padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 12px 0; }
+  .steps { counter-reset: s; list-style: none; padding: 0; }
+  .steps li { counter-increment: s; position: relative; padding: 6px 0 6px 44px; }
+  .steps li::before { content: counter(s); position: absolute; left: 0; top: 6px; width: 30px; height: 30px;
+    border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; text-align: center; line-height: 30px; font-size: 15px; }
+  .flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 12px 0; }
+  .flow span { background: var(--accent-soft); color: var(--accent); border-radius: 8px; padding: 6px 12px; font-weight: 600; font-size: 15px; }
+  .flow b { color: #9aa1ad; }
+  .done { font-weight: 700; color: var(--ok); }
+  .ref { font-size: 14px; color: var(--muted); }
+  svg text { font-family: inherit; }
+  p.go { margin: 16px 0 4px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .go-btn { display: inline-block; background: var(--accent); color: #fff; text-decoration: none; font-weight: 700;
+    font-size: 15.5px; padding: 8px 16px; border-radius: 8px; }
+  .go-btn:hover { background: #2448ad; }
+  @media print { .go-btn { background: none; color: var(--accent); padding: 0; } }
+  @media (max-width: 900px) {
+    nav { position: static; width: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+    main { margin-left: 0; padding: 16px; }
+    .g2, .g3, .g4 { grid-template-columns: 1fr; }
+    main table { display: block; overflow-x: auto; }
+    section { padding: 22px 18px; }
+  }
+  @media print {
+    nav { display: none; } main { margin: 0; max-width: none; }
+    section { break-inside: avoid-page; page-break-after: always; }
+  }
+
+  /* ---- 에이전트 시뮬레이터 ---- */
+  .sim { border: 1px solid var(--line); border-radius: 12px; padding: 16px; background: #fbfbfc; margin-top: 12px; }
+  .sim-controls { display: grid; gap: 8px; margin-bottom: 12px; }
+  .sim-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 15px; }
+  .sim-label { font-weight: 700; color: var(--muted); min-width: 72px; font-size: 14px; }
+  .sim-row label { display: inline-flex; gap: 4px; align-items: center; cursor: pointer; }
+  .sim-row label.off { color: #a8aeb8; cursor: not-allowed; }
+  .sim-sc, .sim-btn { font: inherit; font-size: 14.5px; border: 1px solid #c4c9d2; background: #fff; border-radius: 8px;
+    padding: 5px 12px; cursor: pointer; color: var(--ink); }
+  .sim-sc:hover, .sim-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .sim-sc.sel { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .sim-btn:disabled { opacity: .45; cursor: not-allowed; }
+  .sim-request { display: flex; gap: 12px; align-items: flex-start; margin: 4px 0 14px; }
+  .sim-req-who { flex: none; font-size: 13px; font-weight: 700; color: #fff; background: var(--accent);
+    border-radius: 999px; padding: 4px 12px; margin-top: 10px; }
+  .sim-req-bubble { position: relative; flex: 1; font-size: 20px; font-weight: 700; line-height: 1.5; color: var(--ink);
+    background: #fff; border: 2px solid var(--accent); border-radius: 14px; padding: 12px 18px; transition: box-shadow .25s, background .25s; }
+  .sim-req-bubble::before { content: ''; position: absolute; left: -9px; top: 16px; width: 14px; height: 14px; background: inherit;
+    border-left: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: rotate(45deg); }
+  .sim-req-bubble.empty { font-size: 16px; font-weight: 500; color: #8a909c; border-color: #c4c9d2; border-style: dashed; }
+  .sim-req-bubble.empty::before { border-color: #c4c9d2; }
+  .sim-req-bubble.live { background: #eef3ff; box-shadow: 0 0 0 5px rgba(47,91,211,.18); animation: simReqIn .45s ease-out; }
+  @keyframes simReqIn { from { transform: translateY(-6px); opacity: .3; } to { transform: none; opacity: 1; } }
+  @media (max-width: 900px) { .sim-request { flex-direction: column; gap: 6px; } .sim-req-who { margin-top: 0; }
+    .sim-req-bubble { font-size: 17px; } .sim-req-bubble::before { display: none; } }
+  .sim-hint { font-size: 13px; color: #8a909c; }
+  .sim-main { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 12px; align-items: start; }
+  .sim-flow { width: 100%; background: #fff; border: 1px solid var(--line); border-radius: 10px; }
+  .sim-node rect, .sim-node polygon { fill: #f4f5f8; stroke: #c4c9d2; stroke-width: 2; transition: fill .25s, stroke .25s; }
+  .sim-node .t { font-size: 15px; font-weight: 700; text-anchor: middle; fill: var(--ink); }
+  .sim-node .s { font-size: 12px; text-anchor: middle; fill: var(--muted); font-family: var(--mono); }
+  .sim-node.done rect, .sim-node.done polygon { stroke: #8fa6e0; }
+  .sim-node.on rect, .sim-node.on polygon { fill: #dfe8ff; stroke: var(--accent); stroke-width: 3; filter: drop-shadow(0 0 6px rgba(47,91,211,.55)); }
+  .sim-node.ok rect, .sim-node.ok polygon { fill: #dff3e7; stroke: var(--ok); stroke-width: 3; filter: drop-shadow(0 0 6px rgba(31,122,77,.5)); }
+  .sim-node.err rect, .sim-node.err polygon { fill: #fde4e4; stroke: #c0392b; stroke-width: 3; filter: drop-shadow(0 0 6px rgba(192,57,43,.5)); }
+  .sim-node.wait rect, .sim-node.wait polygon { fill: var(--warn-soft); stroke: var(--warn); stroke-width: 3; animation: simPulse 1s ease-in-out infinite; }
+  @keyframes simPulse { 50% { fill: #ffe2b0; filter: drop-shadow(0 0 8px rgba(154,91,0,.6)); } }
+  .sim-edge { fill: none; stroke: #c4c9d2; stroke-width: 2; marker-end: url(#arOff); }
+  .sim-edge.done { stroke: #8fa6e0; marker-end: url(#arDone); }
+  .sim-edge.on { stroke: var(--accent); stroke-width: 3; marker-end: url(#arOn); stroke-dasharray: 7 5; animation: simDash .6s linear infinite; }
+  @keyframes simDash { to { stroke-dashoffset: -12; } }
+  .sim-elabel { font-size: 12px; fill: #8a909c; }
+  .sim-turns { font-size: 13px; font-weight: 700; fill: var(--warn); }
+  .sim-code { background: #20232a; color: #c9cfdb; border-radius: 10px; padding: 10px 0; font-family: var(--mono);
+    font-size: 12.5px; line-height: 1.55; overflow-x: auto; }
+  .sim-code .cl { white-space: pre; padding: 0 12px; border-left: 3px solid transparent; }
+  .sim-code .cl.gap { line-height: .6; }
+  .sim-code .cl.cmt { color: #8c96a8; }
+  .sim-code .cl.hot { background: rgba(143,180,255,.18); border-left-color: #8fb4ff; color: #fff; }
+  .sim-code .k { color: #8fb4ff; } .sim-code .s { color: #b5e3a1; } .sim-code .c { color: #8c96a8; }
+  .sim-say { margin-top: 12px; background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--accent);
+    border-radius: 8px; padding: 10px 14px; min-height: 76px; }
+  .sim-say.err { border-left-color: #c0392b; } .sim-say.ok { border-left-color: var(--ok); } .sim-say.wait { border-left-color: var(--warn); }
+  .sim-meta { display: flex; gap: 16px; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+  #sim-text { font-size: 15.5px; }
+  .sim-hist { margin-top: 12px; }
+  .sim-hist-title { font-size: 13.5px; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+  #sim-msgs { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; max-height: 300px; overflow-y: auto; }
+  #sim-msgs li { border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; background: #fff; font-size: 13.5px; }
+  #sim-msgs li.new { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+  #sim-msgs .role { display: inline-block; font-weight: 700; font-size: 12px; border-radius: 4px; padding: 0 6px; margin-right: 6px; }
+  #sim-msgs .role.user { background: #eceef2; color: var(--muted); }
+  #sim-msgs .role.assistant { background: var(--accent-soft); color: var(--accent); }
+  #sim-msgs .blk { font-family: var(--mono); font-size: 12.5px; margin: 3px 0 0 0; white-space: pre-wrap; word-break: break-word; }
+  #sim-msgs .blk .tag { font-weight: 700; }
+  #sim-msgs .blk.tu .tag { color: var(--warn); } #sim-msgs .blk.tr .tag { color: var(--ok); } #sim-msgs .blk.tr.e .tag { color: #c0392b; }
+  @media (max-width: 900px) { .sim-main { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .sim-edge.on, .sim-node.wait rect { animation: none; } }
+  .step-list { list-style: none; padding: 0; margin: 12px 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .step-list a.card:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .step-list .card { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; height: 100%; padding: 10px 12px; border: 1px solid var(--line);
+    border-radius: 10px; background: #fbfbfc; color: var(--ink); text-decoration: none; font-weight: 600; font-size: 15.5px; }
+  .step-list .sn { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 13.5px; }
+  .step-list code { font-size: 12px; font-weight: 400; color: var(--muted); }
+  @media (max-width: 900px) { .step-list { grid-template-columns: 1fr; } }
+
+
+
+
+  /* ==== 테마: 템플릿(다크그린) 기반 — 색은 모두 위 :root 토큰에서 ==== */
+  body { background: var(--bg); color: var(--ink); }
+  nav { background: var(--nav-bg); border-color: var(--line); }
+  nav .brand { color: var(--ink); }
+  nav a { color: var(--muted); }
+  nav a:hover, nav a.active { background: var(--accent-soft); color: var(--accent); }
+  nav .group { color: var(--muted); opacity: .8; }
+  section { background: var(--surface); border-color: var(--line); }
+  .kicker, .concept-label { color: var(--accent); }
+  h1, h2, h3, h4 { color: var(--ink); }
+  .lead, .ref, .src, .box p { color: var(--muted); }
+  th, td { border-color: var(--line); }
+  th { background: var(--th-bg); color: var(--ink); }
+  code { background: var(--code-bg); color: var(--ink-2); }
+  pre { background: var(--pre-bg); color: var(--pre-ink); border: 1px solid var(--line); }
+  pre code { color: inherit; background: none; }
+  pre .c { color: var(--syn-c); } pre .k { color: var(--syn-k); } pre .s { color: var(--syn-s); }
+  .box { background: var(--surface-2); border-color: var(--line); }
+  .badge.prop { background: var(--warn-soft); color: var(--warn); }
+  .badge.fix { background: var(--accent-soft); color: var(--accent); }
+  .note { background: var(--accent-soft); border-left-color: var(--accent); color: var(--ink); }
+  .caution { background: var(--warn-soft); border-left-color: var(--warn); color: var(--ink); }
+  .steps li::before { background: var(--accent); color: var(--accent-ink); }
+  .flow span { background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent-border); }
+  .flow b { color: var(--muted); }
+  .done { color: var(--ok); }
+  a { color: var(--accent); }
+  .go-btn, .topbar a { background: var(--accent); color: var(--accent-ink); }
+  .go-btn:hover, .topbar a:hover { background: var(--accent-hover); }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+  input[type=radio], input[type=checkbox] { accent-color: var(--accent); }
+
+  /* 표지 느낌: 템플릿 표지처럼 검은 바탕 + 녹색 빛 (템플릿 배경 이미지는 쓰지 않음) */
+  html[data-theme="dark"] #intro { background: radial-gradient(110% 90% at 100% 100%, rgba(72, 204, 108, .18), transparent 55%), #0B0B0B; }
+  html[data-theme="light"] #intro { background: radial-gradient(110% 90% at 100% 100%, rgba(21, 115, 58, .12), transparent 55%), #FFFFFF; }
+  #intro h1 { font-size: 40px; }
+  /* 시뮬레이터 */
+  .sim { background: var(--surface-2); border-color: var(--line); }
+  .sim-label, .sim-hint, .sim-meta, .sim-hist-title { color: var(--muted); }
+  .sim-row label { color: var(--ink-2); }
+  .sim-row label.off { color: var(--line-strong); }
+  .sim-sc, .sim-btn { background: var(--surface); border-color: var(--line-strong); color: var(--ink); }
+  .sim-sc:hover, .sim-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .sim-sc.sel { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .sim-req-who { background: var(--accent); color: var(--accent-ink); }
+  .sim-req-bubble { background: var(--surface); color: var(--ink); border-color: var(--accent); }
+  .sim-req-bubble::before { border-color: var(--accent); }
+  .sim-req-bubble.empty { color: var(--muted); border-color: var(--line-strong); }
+  .sim-req-bubble.empty::before { border-color: var(--line-strong); }
+  .sim-req-bubble.live { background: var(--accent-soft); box-shadow: 0 0 0 5px rgba(72, 204, 108, .18); }
+  .sim-flow { background: var(--surface); border-color: var(--line); }
+  #arOff path { fill: var(--edge); } #arDone path { fill: var(--edge-done); } #arOn path { fill: var(--accent); }
+  .sim-node rect, .sim-node polygon { fill: var(--surface-2); stroke: var(--line-strong); }
+  .sim-node .t { fill: var(--ink); } .sim-node .s { fill: var(--muted); }
+  .sim-node.done rect, .sim-node.done polygon { stroke: var(--edge-done); }
+  .sim-node.on rect, .sim-node.on polygon { fill: var(--accent-soft); stroke: var(--accent); filter: drop-shadow(0 0 7px rgba(72, 204, 108, .6)); }
+  .sim-node.ok rect, .sim-node.ok polygon { fill: var(--accent); stroke: var(--accent); filter: drop-shadow(0 0 8px rgba(72, 204, 108, .55)); }
+  .sim-node.ok .t, .sim-node.ok .s { fill: var(--accent-ink); }
+  .sim-node.err rect, .sim-node.err polygon { fill: var(--err-soft); stroke: var(--err); filter: drop-shadow(0 0 7px rgba(240, 96, 90, .55)); }
+  .sim-node.wait rect, .sim-node.wait polygon { fill: var(--warn-soft); stroke: var(--warn); animation: simPulseDark 1s ease-in-out infinite; }
+  @keyframes simPulseDark { 50% { fill: var(--wait-pulse); filter: drop-shadow(0 0 8px rgba(227, 163, 58, .6)); } }
+  .sim-edge { stroke: var(--edge); } .sim-edge.done { stroke: var(--edge-done); } .sim-edge.on { stroke: var(--accent); }
+  .sim-elabel { fill: var(--muted); } .sim-turns { fill: var(--warn); }
+  .sim-code { background: var(--pre-bg); color: #C9C9C9; border: 1px solid var(--line); }
+  .sim-code .cl.cmt, .sim-code .c { color: var(--syn-c); }
+  .sim-code .k { color: var(--syn-k); } .sim-code .s { color: var(--syn-s); }
+  .sim-code .cl.hot { background: rgba(72, 204, 108, .16); border-left-color: var(--accent); color: #FFFFFF; }
+  .sim-say { background: var(--surface); border-color: var(--line); border-left-color: var(--accent); color: var(--ink); }
+  .sim-say.err { border-left-color: var(--err); } .sim-say.ok { border-left-color: var(--ok); } .sim-say.wait { border-left-color: var(--warn); }
+  #sim-msgs li { background: var(--surface); border-color: var(--line); color: var(--ink-2); }
+  #sim-msgs li.new { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+  #sim-msgs .role.user { background: var(--line-strong); color: var(--ink-2); }
+  #sim-msgs .role.assistant { background: var(--accent-soft); color: var(--accent); }
+  #sim-msgs .blk.tu .tag { color: var(--warn); } #sim-msgs .blk.tr .tag { color: var(--ok); } #sim-msgs .blk.tr.e .tag { color: var(--err); }
+  /* 단계 목록 카드 */
+  .step-list .card { background: var(--surface-2); border-color: var(--line); color: var(--ink); }
+  .step-list a.card:hover { background: var(--accent-soft); border-color: var(--accent-border); }
+  .step-list .sn { background: var(--accent); color: var(--accent-ink); }
+  .step-list code { background: none; color: var(--muted); }
+  @media print { body, section, #intro { background: #fff !important; color: #000; } }
+
+  .theme-toggle { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 14px; font: inherit; font-size: 13px; font-weight: 600;
+    padding: 5px 12px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--surface-2); color: var(--ink); cursor: pointer; }
+  .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+  .theme-toggle .dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid currentColor; background: linear-gradient(90deg, currentColor 50%, transparent 50%); }
+  @media print { .theme-toggle { display: none; } }
+
+  /* ==== 페이지 배치: 블록형 목차 + 본문 가운데 정렬 (실습 안내 페이지와 동일) ==== */
+  nav { padding: 22px 14px; }
+  nav ol { display: grid; gap: 6px; }
+  nav li { margin: 0; }
+  nav a { display: block; padding: 9px 12px; border-radius: 9px; border: 1px solid var(--line-strong);
+    background: var(--surface); color: var(--ink); font-size: 14.5px; font-weight: 500; line-height: 1.4;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, .04); transition: background .15s, border-color .15s; }
+  nav .group { margin: 14px 2px 0; font-size: 12.5px; font-weight: 700; color: var(--muted); opacity: 1; }
+  html[data-theme="dark"] nav a { background: var(--surface-2); }
+  html[data-theme] nav a:hover { background: var(--accent-soft); border-color: var(--accent-border); color: var(--ink); }
+  html[data-theme] nav a.active { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
+  /* 본문: 목차 오른쪽 영역 안에서 좌우 여백을 똑같이 */
+  main { max-width: none; padding: 32px 48px 80px; }
+  main > section { max-width: 1040px; margin-left: auto; margin-right: auto; }
+  @media (max-width: 900px) {
+    nav ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    nav .group { grid-column: 1 / -1; }
+    main { padding: 16px; }
+  }</style>
+<script>
+  /* 저장된 화면 모드를 그리기 전에 적용 (없으면 페이지 기본값) */
+  try { var t = localStorage.getItem('re-agent-theme'); if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+</script>
+<style>
+  main { margin: 0 auto !important; max-width: 1100px; }
+  .xhead { padding: 20px 0 6px; }
+  .xhead h1 { margin: 0 0 6px; font-size: 22px; }
+  .xhead p { margin: 4px 0; color: var(--muted); font-size: 14px; line-height: 1.6; }
+  .xhead ol { margin: 6px 0 0; padding-left: 20px; color: var(--muted); font-size: 14px; line-height: 1.7; }
+</style>
+</head>
+<body>
+<main>
+<header class="xhead">
+  <button type="button" class="theme-toggle" aria-pressed="true" aria-label="라이트 모드로 바꾸기"><span class="dot" aria-hidden="true"></span><span class="lbl">라이트 모드로</span></button>
+  <h1>에이전트 시뮬레이터 — 보조자료</h1>
+  <p>‘AI 답변 생성과 에이전트 원리’ 수업에서 함께 보는 보조자료입니다. 미리 정한 시나리오를 재생하는 <strong>모형</strong>이며, 실제 AI 모델을 호출하거나 파일을 실행하지 않습니다.</p>
+  <ol>
+    <li>아래 ‘요청’ 버튼(①~④) 중 하나를 누르면 재생이 바로 시작됩니다.</li>
+    <li>한 단계씩 보려면 <strong>다음 단계</strong>를 누릅니다(자동 재생이 멈춥니다). <strong>처음부터</strong>로 다시 시작합니다.</li>
+    <li>흐름도에서 지금 단계가 강조되고, 아래 ‘이력’ 목록에 요청·도구 결과가 쌓이는 모습을 봅니다.</li>
+  </ol>
+  <p>발췌 출처: 별도 과정 자료 ‘리버스 엔지니어링으로 배우는 AI 에이전트’의 ‘에이전트 설명’ 구간(내용 무수정 발췌). 코드 패널은 shareAI Lab learn-claude-code(MIT)의 발췌·축약입니다.</p>
+</header>
+
+<section id="agent">
+  <div class="kicker">에이전트 설명</div>
+  <h2>에이전트는 어떻게 움직일까 — 직접 눌러 보기</h2>
+  <p class="lead">요청을 고르고, 도구가 어떻게 응답할지 정한 뒤 재생합니다. 흐름도·원본 코드·이력이 한 단계씩 함께 움직입니다.</p>
+
+  <div class="sim" id="sim">
+    <div class="sim-controls">
+      <div class="sim-row">
+        <span class="sim-label">요청</span>
+        <button type="button" class="sim-sc" data-sc="A">① 일반 질문</button>
+        <button type="button" class="sim-sc" data-sc="B">② 파일 하나 읽기</button>
+        <button type="button" class="sim-sc" data-sc="C">③ 공통 과제 (여러 번)</button>
+        <button type="button" class="sim-sc" data-sc="D">④ 끝나지 않는 요청</button>
+      </div>
+      <div class="sim-row" id="sim-modes">
+        <span class="sim-label">도구 결과</span>
+        <label><input type="radio" name="sim-mode" value="ok" checked=""> 올바른 결과</label>
+        <label><input type="radio" name="sim-mode" value="bad"> 이상한 결과 (오류)</label>
+        <label><input type="radio" name="sim-mode" value="none"> 무응답 (시간 초과)</label>
+        <span class="sim-hint" id="sim-mode-hint"></span>
+      </div>
+      <div class="sim-row">
+        <button type="button" class="sim-btn" id="sim-play">▶ 자동 재생</button>
+        <button type="button" class="sim-btn" id="sim-next" disabled="">다음 단계 ›</button>
+        <button type="button" class="sim-btn" id="sim-reset">↺ 처음부터</button>
+      </div>
+    </div>
+
+    <div class="sim-request" id="sim-req-box">
+      <div class="sim-req-who">사용자 요청</div>
+      <div class="sim-req-bubble empty" id="sim-req">위의 요청 버튼을 눌러 보세요.</div>
+    </div>
+
+    <div class="sim-main">
+      <svg class="sim-flow" viewBox="0 0 650 300" role="img" aria-label="에이전트 흐름도: 사용자 요청, 모델 호출, tool_use 판단, 도구 실행, 도구 결과, 이력, 최종 답">
+        <defs>
+          <marker id="arOff" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#c4c9d2"></path></marker>
+          <marker id="arDone" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8fa6e0"></path></marker>
+          <marker id="arOn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2f5bd3"></path></marker>
+        </defs>
+        <path class="sim-edge" id="e_in" d="M120,140 H166"></path>
+        <path class="sim-edge" id="e_dec" d="M300,140 H326"></path>
+        <path class="sim-edge" id="e_no" d="M385,102 V41 H486"></path>
+        <path class="sim-edge" id="e_yes" d="M440,140 H486"></path>
+        <path class="sim-edge" id="e_res" d="M560,168 V222"></path>
+        <path class="sim-edge" id="e_back" d="M490,254 H304"></path>
+        <path class="sim-edge" id="e_loop" d="M235,226 V172"></path>
+        <text class="sim-elabel" x="392" y="74">tool_use 없음</text>
+        <text class="sim-elabel" x="463" y="131" text-anchor="middle">있음</text>
+        <text class="sim-elabel" x="397" y="246" text-anchor="middle">tool_result 를 이력에 추가</text>
+        <text class="sim-elabel" x="243" y="203">다시 호출</text>
+
+        <g class="sim-node" id="n_user"><rect x="10" y="112" width="110" height="56" rx="10"></rect><text x="65" y="137" class="t">사용자 요청</text><text x="65" y="156" class="s" id="s_user">입력</text></g>
+        <g class="sim-node" id="n_model"><rect x="170" y="112" width="130" height="56" rx="10"></rect><text x="235" y="137" class="t">모델 호출</text><text x="235" y="156" class="s" id="s_model">messages.create</text></g>
+        <g class="sim-node" id="n_decide"><polygon points="330,140 385,102 440,140 385,178"></polygon><text x="385" y="137" class="t">tool_use</text><text x="385" y="155" class="s" id="s_decide">있나?</text></g>
+        <g class="sim-node" id="n_answer"><rect x="490" y="16" width="140" height="50" rx="10"></rect><text x="560" y="38" class="t">최종 답</text><text x="560" y="56" class="s" id="s_answer">return</text></g>
+        <g class="sim-node" id="n_tool"><rect x="490" y="112" width="140" height="56" rx="10"></rect><text x="560" y="137" class="t">도구 실행</text><text x="560" y="156" class="s" id="s_tool">TOOL_HANDLERS</text></g>
+        <g class="sim-node" id="n_result"><rect x="490" y="226" width="140" height="56" rx="10"></rect><text x="560" y="251" class="t">도구 결과</text><text x="560" y="270" class="s" id="s_result">문자열</text></g>
+        <g class="sim-node" id="n_history"><rect x="170" y="226" width="130" height="56" rx="10"></rect><text x="235" y="251" class="t">이력</text><text x="235" y="270" class="s" id="s_history">messages</text></g>
+        <text class="sim-turns" x="385" y="205" text-anchor="middle" id="s_turns"></text>
+      </svg>
+
+      <div class="sim-code" aria-label="원본 s01 코드 발췌">
+<div class="cl" data-c="input">history.append({<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: query})</div>
+<div class="cl" data-c="input">agent_loop(history)</div>
+<div class="cl gap"> </div>
+<div class="cl"><span class="k">def</span> agent_loop(messages):</div>
+<div class="cl" data-c="loop">    <span class="k">while</span> True:</div>
+<div class="cl cmt" data-c="limit">      <span class="c"># 우리 구현: for turn in range(MAX_TURNS)</span></div>
+<div class="cl" data-c="create">        response = client.messages.create(</div>
+<div class="cl" data-c="create">            model, system, messages, tools)</div>
+<div class="cl" data-c="appendA">        messages.append({<span class="s">"role"</span>: <span class="s">"assistant"</span>,</div>
+<div class="cl" data-c="appendA">                         <span class="s">"content"</span>: response.content})</div>
+<div class="cl" data-c="check">        tool_calls = [b <span class="k">for</span> b <span class="k">in</span> response.content</div>
+<div class="cl" data-c="check">                      <span class="k">if</span> b.type == <span class="s">"tool_use"</span>]</div>
+<div class="cl" data-c="return">        <span class="k">if not</span> tool_calls:</div>
+<div class="cl" data-c="return">            <span class="k">return</span></div>
+<div class="cl" data-c="run">        results = []</div>
+<div class="cl" data-c="run">        <span class="k">for</span> block <span class="k">in</span> tool_calls:</div>
+<div class="cl" data-c="run">            output = run_bash(block.input[...])</div>
+<div class="cl" data-c="result">            results.append({<span class="s">"type"</span>: <span class="s">"tool_result"</span>,</div>
+<div class="cl" data-c="result">                <span class="s">"tool_use_id"</span>: block.id, <span class="s">"content"</span>: output})</div>
+<div class="cl" data-c="appendU">        messages.append({<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: results})</div>
+      </div>
+    </div>
+
+    <div class="sim-say">
+      <div class="sim-meta"><span id="sim-step">0 / 0</span><span>모델 호출 <b id="sim-cm">0</b>회</span><span>도구 실행 <b id="sim-ct">0</b>회</span></div>
+      <div id="sim-text">요청을 고르면 재생이 시작됩니다.</div>
+    </div>
+
+    <div class="sim-hist">
+      <div class="sim-hist-title">이력 (messages) — 모델에게 매번 통째로 전달되는 목록</div>
+      <ol id="sim-msgs"></ol>
+    </div>
+    <p class="src">미리 정한 시나리오를 재생하는 모형입니다(실제 모델 호출 아님). 코드 패널: learn-claude-code 커밋 7226f55 <code>s01_agent_loop/code.py</code> 96–126·145–146행 발췌·축약 (shareAI Lab, MIT). '우리 구현' 줄은 원본에 없는 반복 한도입니다.</p>
+  </div>
+</section>
+
+</main>
+<script>
+  // 현재 보이는 섹션을 목차에 표시 (외부 의존성 없음)
+  const links = [...document.querySelectorAll('nav a')];
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  document.querySelectorAll('main section').forEach(s => obs.observe(s));
+
+  // ---- 에이전트 시뮬레이터 (미리 정한 시나리오 재생, 외부 의존성 없음) ----
+  (function () {
+    const root = document.getElementById('sim');
+    if (!root) return;
+    const $ = id => document.getElementById(id);
+    const DEMO_LIMIT = 3;
+    const REQ = {
+      A: '반복 루프가 뭐야? 한 문장으로 알려줘.',
+      B: 'docs/venue.txt 에 적힌 예약 확인 번호는?',
+      C: 'docs 폴더의 문서를 확인해서 11월 행사 준비 항목 중 미완료 항목과 담당자를 정리해 output/status.md 파일로 저장해줘. 지난 행사 자료는 제외해줘.',
+      D: 'docs 폴더에 새 파일이 생길 때까지 계속 확인해줘.'
+    };
+    const LIST = 'data/signups.csv\ndocs/checklist.txt\ndocs/event_overview.txt\ndocs/old_memo.txt\ndocs/venue.txt';
+    const VENUE = '장소: 별빛도서관 3층 세미나실\n예약 확인 번호: R-4821\n입실 가능 시각: 13:30';
+    const CHECK = '2 | 간식·음료 주문 | 박도윤 | 미완료\n3 | 참가 안내 메일 발송 | 이하린 | 미완료\n5 | 토론 질문지 작성 | 최지우 | 미완료 …';
+    const OVERVIEW = '일시: 2026-11-28(토) 14:00 ~ 16:30 …';
+
+    function build(sc, mode) {
+      const st = [];
+      let m = 0;
+      const limited = sc === 'D';
+      const turns = () => limited ? `반복 ${m} / ${DEMO_LIMIT} (데모 한도)` : `반복 ${m}회차`;
+      const P = o => st.push(o);
+      const user = text => P({ node: 'user', code: 'input', sub: { user: '입력됨' },
+        push: { role: 'user', blocks: [{ k: 'text', v: text }] },
+        say: '요청을 이력(messages)에 넣고 <code>agent_loop(history)</code> 를 호출합니다.' });
+      const call = () => { m++; P({ node: 'model', edge: m === 1 ? 'e_in' : 'e_loop', code: 'create', cm: 1,
+        sub: { model: `${m}회차 호출` }, turns: turns(),
+        say: m === 1 ? '모델 호출 1회차 — 시스템 지시 + 이력 + <b>도구 목록</b>을 함께 보냅니다.'
+                     : `모델 호출 ${m}회차 — 도구 결과가 붙은 <b>이력 전체</b>를 다시 보냅니다. 모델은 매번 처음부터 이력을 읽습니다.` }); };
+      const reply = (blocks, say) => P({ node: 'model', code: 'appendA', push: { role: 'assistant', blocks }, say });
+      const decide = (n, extra = '') => P({ node: 'decide', edge: 'e_dec', code: 'check', sub: { decide: n ? `${n}개 있음` : '없음' },
+        say: n ? `응답에서 <code>tool_use</code> 블록 <b>${n}개</b>를 찾았습니다 → 도구 쪽으로 갑니다.${extra}`
+               : '응답에 <code>tool_use</code> 블록이 <b>없습니다</b>.' });
+      const run = (name, say) => P({ node: 'tool', edge: 'e_yes', code: 'run', ct: 1, sub: { tool: name }, say });
+      const wait = say => P({ node: 'tool', state: 'wait', code: 'run', sub: { tool: '응답 대기…' }, say, cls: 'wait' });
+      const result = (ok, label, say) => P({ node: 'result', edge: 'e_res', state: ok ? 'ok' : 'err', code: 'result',
+        sub: { result: label }, say, cls: ok ? 'ok' : 'err' });
+      const back = (blocks, say) => P({ node: 'history', edge: 'e_back', code: 'appendU', push: { role: 'user', blocks },
+        say: say || '도구 결과를 <code>tool_use_id</code> 로 짝지어 <b>user</b> 메시지로 이력에 추가합니다. 그리고 다시 위로 —' });
+      const answer = (say, cls = 'ok') => P({ node: 'answer', edge: 'e_no', state: cls === 'err' ? 'err' : 'ok', code: 'return',
+        sub: { answer: 'return' }, say, cls });
+      const T = v => ({ k: 'text', v });
+      const TU = (id, name, input) => ({ k: 'tu', id, name, input });
+      const TR = (id, v, e) => ({ k: 'tr', id, v, e });
+
+      if (sc === 'A') {
+        user(REQ.A); call();
+        reply([T('반복 루프는 모델이 도구를 더 요청하지 않을 때까지 호출·실행·결과 전달을 되풀이하는 구조입니다.')],
+          '모델이 텍스트만 돌려줬습니다. 응답을 <b>assistant</b> 메시지로 이력에 추가합니다.');
+        decide(0);
+        answer('도구 요청이 없으니 <code>return</code> — 파일과 관계없는 일반 질문은 <b>도구 없이 바로 답</b>합니다. 모델 호출 1회로 끝.');
+      }
+
+      if (sc === 'B') {
+        user(REQ.B); call();
+        if (mode === 'bad') {
+          reply([T('파일을 읽어 보겠습니다.'), TU('t1', 'read_file', { path: 'venue.txt' })],
+            '모델이 도구 사용을 요청했습니다. 그런데 경로를 <b>venue.txt</b> 로 잘못 적었습니다.');
+          decide(1);
+          run('read_file', '<code>TOOL_HANDLERS["read_file"]</code> 로 함수를 찾아 실행합니다.');
+          result(false, '오류', '<b>이상한 결과</b>: <code>Error: FileNotFoundError</code>. 프로그램은 멈추지 않고 오류를 <b>문자열 결과</b>로 만듭니다.');
+          back([TR('t1', 'Error: FileNotFoundError: venue.txt', true)], '오류 결과도 똑같이 이력에 추가합니다(<code>is_error</code>). 모델이 이걸 보고 다음 행동을 바꿀 수 있게 —');
+          call();
+          reply([T('경로를 확인하겠습니다.'), TU('t2', 'list_files', {})], '모델이 오류를 읽고 <b>파일 목록부터 확인</b>하기로 바꿨습니다.');
+          decide(1);
+          run('list_files', 'list_files 실행.');
+          result(true, '정상', '파일 목록을 돌려줍니다. 실제 경로는 <b>docs/venue.txt</b>.');
+          back([TR('t2', LIST)]);
+          call();
+          reply([TU('t3', 'read_file', { path: 'docs/venue.txt' })], '올바른 경로로 다시 읽기를 요청합니다.');
+          decide(1);
+          run('read_file', 'read_file 실행.');
+          result(true, '정상', '이번엔 파일 내용이 돌아왔습니다.');
+          back([TR('t3', VENUE)]);
+          call();
+          reply([T('예약 확인 번호는 R-4821 입니다.')], '모델이 결과를 근거로 텍스트로 답합니다.');
+          decide(0);
+          answer('종료. <b>오류 → 목록 확인 → 다시 읽기</b>로 스스로 고쳤습니다. 이것이 결과를 다시 모델에게 돌려주는 루프의 힘입니다. (모델 호출 4회)');
+        } else if (mode === 'none') {
+          reply([T('파일을 읽어 보겠습니다.'), TU('t1', 'read_file', { path: 'docs/venue.txt' })], '모델이 도구 사용을 요청했습니다.');
+          decide(1);
+          run('read_file', 'read_file 실행 — 그런데 도구가 응답하지 않습니다…');
+          wait('<b>무응답</b>: 도구가 끝나지 않습니다. 시간 제한이 없으면 프로그램은 <b>여기서 영원히 멈춥니다</b>. (원본 bash 도구는 <code>timeout=120</code> 초)');
+          result(false, '시간 초과', '시간 제한에 걸려 <code>Error: Timeout</code> 문자열이 결과가 됩니다.');
+          back([TR('t1', 'Error: Timeout (120s)', true)]);
+          call();
+          reply([TU('t2', 'read_file', { path: 'docs/venue.txt' })], '모델이 같은 요청을 <b>한 번 더 시도</b>합니다.');
+          decide(1);
+          run('read_file', 'read_file 다시 실행…');
+          wait('또 응답이 없습니다.');
+          result(false, '시간 초과', '두 번째도 시간 초과.');
+          back([TR('t2', 'Error: Timeout (120s)', true)]);
+          call();
+          reply([T('파일을 읽지 못했습니다(시간 초과). 잠시 후 다시 시도해 주세요.')], '모델이 더 시도하지 않고 실패를 알립니다.');
+          decide(0);
+          answer('루프는 <b>끝났지만 과제는 실패</b>했습니다. "종료"와 "성공"은 다릅니다 — 답 내용을 직접 확인해야 합니다.', 'err');
+        } else {
+          reply([T('파일을 읽어 보겠습니다.'), TU('t1', 'read_file', { path: 'docs/venue.txt' })],
+            '응답에 텍스트와 함께 <code>tool_use</code>(read_file) 블록이 들어 있습니다. 이 응답도 이력에 추가합니다.');
+          decide(1);
+          run('read_file', '<code>TOOL_HANDLERS["read_file"]</code> 로 함수를 찾아 실제로 파일을 읽습니다. 모델이 직접 파일을 읽는 게 아닙니다.');
+          result(true, '정상', '<b>올바른 결과</b>: 파일 내용이 문자열로 돌아왔습니다.');
+          back([TR('t1', VENUE)]);
+          call();
+          reply([T('예약 확인 번호는 R-4821 입니다.')], '모델이 도구 결과를 근거로 답을 씁니다.');
+          decide(0);
+          answer('종료. 도구 1회 + 모델 호출 2회. 답의 번호가 파일에만 있는 값이라 실제로 읽었다는 증거가 됩니다.');
+        }
+      }
+
+      if (sc === 'C') {
+        user(REQ.C); call();
+        reply([T('어떤 문서가 있는지 먼저 보겠습니다.'), TU('t1', 'list_files', { folder: 'docs' })], '첫 행동은 목록 확인입니다.');
+        decide(1);
+        run('list_files', 'list_files 실행.');
+        result(true, '정상', '파일 목록이 돌아왔습니다.');
+        back([TR('t1', LIST.replace('data/signups.csv\n', ''))]);
+        call();
+        if (mode === 'bad') {
+          reply([TU('t2', 'read_file', { path: 'docs/check_list.txt' })], '준비 항목 문서를 읽으려는데 이름을 <b>check_list.txt</b> 로 잘못 적었습니다.');
+          decide(1);
+          run('read_file', 'read_file 실행.');
+          result(false, '오류', '<b>이상한 결과</b>: 파일 없음 오류가 문자열로 돌아옵니다.');
+          back([TR('t2', 'Error: FileNotFoundError: docs/check_list.txt', true)]);
+          call();
+          reply([TU('t3', 'read_file', { path: 'docs/checklist.txt' })], '앞의 목록과 오류를 보고 올바른 이름으로 다시 요청합니다.');
+          decide(1);
+          run('read_file', 'read_file 실행.');
+          result(true, '정상', '준비 항목이 돌아왔습니다.');
+          back([TR('t3', CHECK)]);
+        } else {
+          reply([TU('t2', 'read_file', { path: 'docs/checklist.txt' }), TU('t3', 'read_file', { path: 'docs/event_overview.txt' })],
+            '이번 응답에는 <code>tool_use</code> 가 <b>2개</b> 들어 있습니다.');
+          decide(2, ' 같은 응답 안의 여러 요청은 <code>for</code> 문으로 모두 실행합니다(모델 호출은 1번).');
+          run('read_file ×2', '두 개를 차례로 실행합니다: checklist.txt, event_overview.txt.');
+          P({ node: 'tool', edge: 'e_yes', code: 'run', ct: 1, sub: { tool: 'read_file ×2' }, say: '두 번째 도구 실행.' });
+          result(true, '정상 ×2', '결과 2개가 각각 자기 <code>tool_use_id</code> 와 짝을 이룹니다.');
+          back([TR('t2', CHECK), TR('t3', OVERVIEW)], '결과 2개를 <b>하나의 user 메시지</b>에 담아 이력에 추가합니다.');
+        }
+        call();
+        const wid = 't4';
+        reply([TU(wid, 'write_file', { path: 'output/status.md', content: '# 미완료 항목 …' })], '읽은 내용으로 요약 파일 저장을 요청합니다.');
+        decide(1);
+        run('write_file', 'write_file 실행.');
+        if (mode === 'none') {
+          wait('<b>무응답</b>: 저장이 끝나지 않습니다(예: 파일이 다른 프로그램에 잠김). 시간 제한이 없으면 여기서 멈춥니다.');
+          result(false, '시간 초과', '시간 제한에 걸려 오류 문자열이 결과가 됩니다.');
+          back([TR(wid, 'Error: Timeout', true)]);
+          call();
+          reply([TU('t5', 'write_file', { path: 'output/status.md', content: '# 미완료 항목 …' })], '모델이 저장을 <b>다시 시도</b>합니다.');
+          decide(1);
+          run('write_file', 'write_file 다시 실행.');
+          result(true, '정상', '이번엔 저장이 끝났습니다.');
+          back([TR('t5', '저장 완료: output/status.md')]);
+        } else {
+          result(true, '정상', '저장 완료.');
+          back([TR(wid, '저장 완료: output/status.md')]);
+        }
+        call();
+        reply([T('미완료 3개(박도윤·이하린·최지우)를 output/status.md 에 저장했습니다.')], '모델이 완료를 알립니다.');
+        decide(0);
+        answer(`종료 — 모델 호출 ${m}회. 하지만 "저장했습니다"라는 <b>말</b>이 아니라 <code>output/status.md</code> 파일을 직접 열어 확인해야 완료입니다.`);
+      }
+
+      if (sc === 'D') {
+        user(REQ.D);
+        for (let i = 1; i <= DEMO_LIMIT; i++) {
+          call();
+          reply([TU('t' + i, 'list_files', { folder: 'docs' })], i === 1 ? '모델이 목록 확인을 요청합니다.' : '결과가 같아도 모델이 <b>또</b> 확인을 요청합니다.');
+          decide(1);
+          run('list_files', 'list_files 실행.');
+          result(true, '정상', '같은 목록이 돌아옵니다.');
+          back([TR('t' + i, LIST.replace('data/signups.csv\n', ''))]);
+        }
+        P({ node: 'decide', state: 'err', code: 'limit', sub: { decide: '한도 도달' }, turns: `반복 ${m} / ${DEMO_LIMIT} — 중단`, cls: 'err',
+          push: { role: 'assistant', blocks: [T(`[반복 한도 ${DEMO_LIMIT}회 도달] 작업을 중단했습니다.`)] },
+          say: `다시 호출하기 전에 <b>반복 한도</b>에 걸려 멈춥니다. 원본은 <code>while True</code> 라 한도가 없어 <b>계속 돕니다</b>. 우리 구현은 요청당 최대 10회(데모는 ${DEMO_LIMIT}회)로 막습니다.` });
+      }
+      return st;
+    }
+
+    // ---- 그리기 ----
+    const NODES = ['user', 'model', 'decide', 'answer', 'tool', 'result', 'history'];
+    const EDGES = ['e_in', 'e_dec', 'e_no', 'e_yes', 'e_res', 'e_back', 'e_loop'];
+    const DEFAULT_SUB = { user: '입력', model: 'messages.create', decide: '있나?', answer: 'return', tool: 'TOOL_HANDLERS', result: '문자열', history: 'messages' };
+    const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    let sc = null, steps = [], idx = -1, timer = null;
+
+    function blockHtml(b) {
+      if (b.k === 'text') return `<div class="blk"><span class="tag">text</span> ${esc(b.v)}</div>`;
+      if (b.k === 'tu') return `<div class="blk tu"><span class="tag">tool_use</span> id=${b.id} · ${esc(b.name)} ${esc(JSON.stringify(b.input))}</div>`;
+      return `<div class="blk tr${b.e ? ' e' : ''}"><span class="tag">tool_result</span> tool_use_id=${b.id}${b.e ? ' · is_error' : ''}\n${esc(b.v)}</div>`;
+    }
+
+    function render() {
+      NODES.forEach(n => { $('n_' + n).setAttribute('class', 'sim-node'); $('s_' + n).textContent = DEFAULT_SUB[n]; });
+      EDGES.forEach(e => $(e).setAttribute('class', 'sim-edge'));
+      root.querySelectorAll('.sim-code .cl').forEach(l => l.classList.remove('hot'));
+      const msgs = []; let cm = 0, ct = 0, turns = '';
+      for (let i = 0; i <= idx; i++) {
+        const s = steps[i];
+        if (s.cm) cm += s.cm; if (s.ct) ct += s.ct;
+        if (s.turns) turns = s.turns;
+        if (s.sub) Object.entries(s.sub).forEach(([k, v]) => { $('s_' + k).textContent = v; });
+        if (s.push) msgs.push({ ...s.push, step: i });
+        if (s.node) $('n_' + s.node).setAttribute('class', 'sim-node ' + (i === idx ? (s.state || 'on') : 'done'));
+        if (s.edge) $(s.edge).setAttribute('class', 'sim-edge ' + (i === idx ? 'on' : 'done'));
+      }
+      const cur = steps[idx];
+      if (cur && cur.code) root.querySelectorAll(`.sim-code .cl[data-c="${cur.code}"]`).forEach(l => l.classList.add('hot'));
+      $('s_history').textContent = msgs.length ? `메시지 ${msgs.length}개` : DEFAULT_SUB.history;
+      if (cur && cur.node === 'history') $('s_history').textContent = `메시지 ${msgs.length}개`;
+      $('s_turns').textContent = turns;
+      $('sim-cm').textContent = cm; $('sim-ct').textContent = ct;
+      $('sim-step').textContent = `${Math.max(idx + 1, 0)} / ${steps.length}`;
+      const say = root.querySelector('.sim-say');
+      say.className = 'sim-say' + (cur && cur.cls ? ' ' + cur.cls : '');
+      $('sim-text').innerHTML = cur ? cur.say : (sc ? '<b>다음 단계</b> 또는 <b>자동 재생</b>을 누르세요.' : '요청을 고르면 재생이 시작됩니다.');
+      $('sim-msgs').innerHTML = msgs.map(mg => `<li class="${mg.step === idx ? 'new' : ''}"><span class="role ${mg.role}">${mg.role}</span>${mg.blocks.map(blockHtml).join('')}</li>`).join('');
+      const list = $('sim-msgs'); list.scrollTop = list.scrollHeight;
+      $('sim-req').classList.toggle('live', !!(cur && cur.node === 'user'));
+      $('sim-next').disabled = !sc || idx >= steps.length - 1;
+      $('sim-play').textContent = timer ? '⏸ 일시정지' : (sc && idx >= steps.length - 1 ? '▶ 다시 재생' : '▶ 자동 재생');
+    }
+
+    function stop() { if (timer) { clearTimeout(timer); timer = null; } }
+    function tick() {
+      if (idx >= steps.length - 1) { stop(); render(); return; }
+      idx++; render();
+      const s = steps[idx];
+      timer = setTimeout(tick, s.state === 'wait' ? 2200 : 1400);
+      render();
+    }
+    function play() {
+      if (!sc) return;
+      if (timer) { stop(); render(); return; }
+      if (idx >= steps.length - 1) idx = -1;
+      timer = setTimeout(tick, 150); render();
+    }
+    function mode() { return root.querySelector('input[name="sim-mode"]:checked').value; }
+    function load(newSc, autoplay) {
+      stop(); sc = newSc;
+      root.querySelectorAll('.sim-sc').forEach(b => b.classList.toggle('sel', b.dataset.sc === sc));
+      const usesMode = sc === 'B' || sc === 'C';
+      root.querySelectorAll('#sim-modes label').forEach(l => { l.classList.toggle('off', !usesMode); l.querySelector('input').disabled = !usesMode; });
+      $('sim-mode-hint').textContent = usesMode ? '' : '이 요청은 도구 결과 설정과 관계없습니다.';
+      $('sim-req').textContent = REQ[sc];
+      $('sim-req').classList.remove('empty');
+      steps = build(sc, mode()); idx = -1; render();
+      if (autoplay) play();
+    }
+
+    root.querySelectorAll('.sim-sc').forEach(b => b.addEventListener('click', () => load(b.dataset.sc, true)));
+    root.querySelectorAll('input[name="sim-mode"]').forEach(r => r.addEventListener('change', () => { if (sc) load(sc, true); }));
+    $('sim-play').addEventListener('click', play);
+    $('sim-next').addEventListener('click', () => { stop(); if (idx < steps.length - 1) { idx++; } render(); });
+    $('sim-reset').addEventListener('click', () => { stop(); idx = -1; render(); });
+    render();
+    window.__sim = { build, load, get state() { return { sc, idx, n: steps.length }; } };  // 검사용
+  })();
+
+  // 다크/라이트 전환 (선택은 이 브라우저에 저장, 교안·실습 페이지 공통)
+  (function () {
+    const btn = document.querySelector('.theme-toggle');
+    if (!btn) return;
+    const html = document.documentElement;
+    const sync = () => {
+      const dark = html.getAttribute('data-theme') === 'dark';
+      btn.querySelector('.lbl').textContent = dark ? '라이트 모드로' : '다크 모드로';
+      btn.setAttribute('aria-pressed', String(dark));
+      btn.setAttribute('aria-label', dark ? '라이트 모드로 바꾸기' : '다크 모드로 바꾸기');
+    };
+    btn.addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      try { localStorage.setItem('re-agent-theme', next); } catch (e) {}
+      sync();
+    });
+    sync();
+  })();
+</script>
+
+
+</body></html>
